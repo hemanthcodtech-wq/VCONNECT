@@ -1,0 +1,63 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@600;700;800&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --color-brand-blue: #0033a0;
+  --color-brand-blue-dark: #B81633;
+  --color-brand-yellow: #FFC107;
+  --color-brand-orange: #FF9800;
+  --color-brand-bg: #F9FAFB;
+  --color-brand-text: #333333;
+  
+  /* Retained for fallback during transition */
+  --color-brand-dark-blue: #08183A;
+  --color-brand-gold: #D4AF37;
+  --color-brand-maroon: #2D1A10;
+  --color-brand-beige: #FDF8F0;
+  --color-brand-beige-darker: #F4EBE0;
+  --color-brand-cream: #FDFBF7;
+  --color-brand-cream-light: #FFFFFF;
+  --color-brand-blue: #3B5F4A;
+
+  /* Admin / Snakzee theme */
+  --color-terracotta: #C8401A;
+  --color-terracotta-dark: #a83414;
+  --color-brown: #3B1F0E;
+  --color-brown-light: #7A5C4A;
+  --color-cream: #FDF6F0;
+  --color-cream-dark: #F5EBE0;
+  --color-gold: #D4A017;
+}
+
+@layer utilities {
+  .pb-safe {
+    padding-bottom: env(safe-area-inset-bottom, 20px);
+  }
+
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .hide-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  @keyframes marquee {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+
+  .animate-marquee {
+    display: inline-flex;
+    min-width: 200%;
+    animation: marquee 25s linear infinite;
+    will-change: transform;
+  }
+}
+
+body {
+  font-family: 'Poppins', sans-serif;
+  background-color: #F8F9FA;
+  color: #333333;
+}
