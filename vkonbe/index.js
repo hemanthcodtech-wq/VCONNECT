@@ -8,8 +8,8 @@ const PORT = process.env.PORT || 5000;
 const allowedOrigins = [
   'http://localhost:5173',
   'https://vconnecthi.vercel.app',
-  'https://vconnecthi.vercel.app',
-  'https://upraders.in',
+  'https://vconnect-theta.vercel.app',
+  
   
   process.env.FRONTEND_URL
 ].filter(Boolean);
