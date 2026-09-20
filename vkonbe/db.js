@@ -13,9 +13,7 @@ pool.connect()
   })
   .catch(err => console.error('❌ DB error:', err.message));
 
-pool.on('connect', (client) => {
-  client.query('SET search_path TO public');
-});
+// Removed client.query('SET search_path TO public') to prevent DeprecationWarning
 pool.on('error', (err, client) => {
   console.error('Unexpected error on idle client', err);
 });

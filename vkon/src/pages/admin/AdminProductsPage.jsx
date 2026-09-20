@@ -14,7 +14,7 @@ export function AdminProductsPage() {
   const initialFormData = { 
     name: "", description: "", product_code: "", instagram_reel_url: "", category: "", model: "", is_active: true, allow_reviews: true,
     variants: [
-      { color: "", instagram_link: "", images: [], sizes: [{ size: "", mrp: "", our_price: "", shopkeeper_price: "", stock: 0, stock_delta: "", code: "", weight: "", offer_id: "" }] }
+      { color: "", instagram_link: "", images: [], sizes: [{ size: "", mrp: "", our_price: "",  stock: 0, stock_delta: "", code: "", weight: "", offer_id: "" }] }
     ],
     details: [],
     reviews: []
@@ -114,7 +114,7 @@ export function AdminProductsPage() {
          size: s.size,
          mrp: s.price, 
          our_price: s.price,
-         shopkeeper_price: s.shopkeeper_price || "",
+         
          stock: s.stock || 0
       })) : [];
       
@@ -174,7 +174,7 @@ export function AdminProductsPage() {
   };
 
   const addVariant = () => {
-    setFormData({ ...formData, variants: [...formData.variants, { color: "", instagram_link: "", images: [], sizes: [{ size: "", mrp: "", our_price: "", shopkeeper_price: "", stock: 0, stock_delta: "", code: "", weight: "", offer_id: "" }] }] });
+    setFormData({ ...formData, variants: [...formData.variants, { color: "", instagram_link: "", images: [], sizes: [{ size: "", mrp: "", our_price: "",  stock: 0, stock_delta: "", code: "", weight: "", offer_id: "" }] }] });
   };
   
   const removeVariant = (index) => {
@@ -217,7 +217,7 @@ export function AdminProductsPage() {
 
   const addSizeToVariant = (vIndex) => {
     const updated = [...formData.variants];
-    updated[vIndex].sizes.push({ size: "", mrp: "", our_price: "", shopkeeper_price: "", stock: 0, stock_delta: "", code: "", weight: "", offer_id: "" });
+    updated[vIndex].sizes.push({ size: "", mrp: "", our_price: "",  stock: 0, stock_delta: "", code: "", weight: "", offer_id: "" });
     setFormData({ ...formData, variants: updated });
   };
   
@@ -325,7 +325,7 @@ export function AdminProductsPage() {
                 <th className="px-4 py-3 text-xs font-bold text-gray-900/60 uppercase tracking-wider">Code (SKU)</th>
                 <th className="px-4 py-3 text-xs font-bold text-gray-900/60 uppercase tracking-wider">Category</th>
                 <th className="px-4 py-3 text-xs font-bold text-gray-900/60 uppercase tracking-wider">Stock Availability</th>
-                <th className="px-4 py-3 text-xs font-bold text-gray-900/60 uppercase tracking-wider">Shopkeeper Price</th>
+                <th className="px-4 py-3 text-xs font-bold text-gray-900/60 uppercase tracking-wider">Our Price</th>
                 <th className="px-4 py-3 text-xs font-bold text-gray-900/60 uppercase tracking-wider">Offer</th>
                 <th className="px-4 py-3 text-xs font-bold text-gray-900/60 uppercase tracking-wider">Status</th>
                 <th className="px-4 py-3 text-right text-xs font-bold text-gray-900/60 uppercase tracking-wider">Actions</th>
@@ -364,7 +364,7 @@ export function AdminProductsPage() {
                       </span>
                     </td>
                     <td className="px-4 py-3 text-sm text-brand-dark-blue font-bold">
-                      {row.size.shopkeeper_price ? `₹${row.size.shopkeeper_price}` : '-'}
+                      {row.size.our_price ? `₹${row.size.our_price}` : '-'}
                     </td>
                     <td className="px-4 py-3">
                       {offerObj ? (
@@ -531,7 +531,6 @@ export function AdminProductsPage() {
                               <input value={sizeObj.code || ""} onChange={e => updateSizeField(vIndex, sIndex, 'code', e.target.value)} placeholder="Code * (e.g. RING-001)" className={`w-32 px-2 py-1.5 bg-gray-50 border rounded text-sm focus:outline-none ${!sizeObj.code ? 'border-red-300' : 'border-gray-200'}`} />
                               <input type="number" value={sizeObj.mrp} onChange={e => updateSizeField(vIndex, sIndex, 'mrp', e.target.value)} placeholder="MRP (₹)" className="w-20 px-2 py-1.5 bg-gray-50 border border-gray-200 rounded text-sm focus:outline-none" />
                               <input type="number" value={sizeObj.our_price} onChange={e => updateSizeField(vIndex, sIndex, 'our_price', e.target.value)} placeholder="Our Price (₹)" className="w-24 px-2 py-1.5 bg-gray-50 border border-gray-200 rounded text-sm focus:outline-none" />
-                              <input type="number" value={sizeObj.shopkeeper_price || ""} onChange={e => updateSizeField(vIndex, sIndex, 'shopkeeper_price', e.target.value)} placeholder="Shopkeeper (₹)" className="w-28 px-2 py-1.5 bg-brand-cream/30 border border-brand-gold/30 rounded text-sm focus:outline-none" />
                               <div className="flex items-center gap-1 w-28 bg-gray-50 border border-gray-200 rounded px-2 py-0.5">
                                 <span className="text-xs text-gray-500 font-bold w-6 text-center">{sizeObj.stock || 0}</span>
                                 <div className="h-4 w-px bg-gray-300"></div>

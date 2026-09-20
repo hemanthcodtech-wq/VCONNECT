@@ -223,7 +223,7 @@ function AddressForm({ onClose, onSave, saving, mapsLoaded, initial }) {
 
 export function MyAddressesPage() {
   const navigate = useNavigate();
-  const { token, addresses, fetchProfile, addAddress, updateAddress, deleteAddress } = useAuthStore();
+  const { token, addresses, fetchProfile, addAddress, updateAddress, deleteAddress, selectedStore } = useAuthStore();
   const [showForm, setShowForm] = useState(false);
   const [editingAddress, setEditingAddress] = useState(null);
   const [saving, setSaving] = useState(false);
@@ -261,14 +261,42 @@ export function MyAddressesPage() {
       <div className="max-w-4xl mx-auto px-4 py-8">
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-2xl font-serif font-bold text-gray-900">Saved Addresses</h2>
-          <button onClick={() => { setEditingAddress(null); setShowForm(true); }}
-            className="flex items-center gap-2 text-sm font-bold text-white bg-brand-blue text-white px-4 py-2.5 rounded-xl hover:bg-gray-600 transition-colors shadow-sm">
-            <Plus className="w-4 h-4" /> Add New Address
-          </button>
+          {!selectedStore && (
+            <button onClick={() => { setEditingAddress(null); setShowForm(true); }}
+              className="flex items-center gap-2 text-sm font-bold text-white bg-brand-blue text-white px-4 py-2.5 rounded-xl hover:bg-gray-600 transition-colors shadow-sm">
+              <Plus className="w-4 h-4" /> Add New Address
+            </button>
+          )}
         </div>
 
         <div className="space-y-4">
-          {addresses.length === 0 ? (
+          {selectedStore ? (
+            <div className="bg-white rounded-2xl shadow-sm border-2 border-brand-blue/20 p-5 relative">
+              <div className="flex items-start gap-4">
+                <div className="w-12 h-12 bg-blue-50 rounded-xl flex items-center justify-center shrink-0">
+                  <MapPin className="w-6 h-6 text-brand-blue" />
+                </div>
+                <div className="flex-1">
+                  <div className="flex items-center gap-2 flex-wrap mb-1">
+                    <p className="text-base font-bold text-gray-900">{selectedStore.name}</p>
+                    <span className="text-[10px] bg-green-100 text-green-700 font-bold px-2 py-0.5 rounded-full flex items-center gap-1 uppercase tracking-wider">
+                      <Check className="w-2.5 h-2.5" /> Active Store
+                    </span>
+                  </div>
+                  <p className="text-sm text-gray-700 leading-relaxed font-medium">
+                    {selectedStore.address}
+                  </p>
+                  <p className="text-sm text-gray-500 mt-2 font-medium flex items-center gap-1.5">
+                    <svg className="w-4 h-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" /></svg>
+                    {selectedStore.phone || 'No phone provided'}
+                  </p>
+                  <div className="mt-4 pt-4 border-t border-gray-100 text-xs text-gray-400">
+                    You are currently managing orders for this store. All deliveries will be routed here.
+                  </div>
+                </div>
+              </div>
+            </div>
+          ) : addresses.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-24 gap-4">
               <div className="w-20 h-20 bg-blue-50 rounded-full flex items-center justify-center">
                 <MapPin className="w-10 h-10 text-blue-300" />

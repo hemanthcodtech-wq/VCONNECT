@@ -34,6 +34,7 @@ async function setup() {
       email VARCHAR(150),
       phone VARCHAR(20),
       address TEXT,
+      certificate_url TEXT,
       created_at TIMESTAMP DEFAULT NOW()
     );
 
@@ -119,6 +120,11 @@ async function setup() {
       is_active BOOLEAN DEFAULT TRUE,
       expires_at TIMESTAMP,
       user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+      usage_type VARCHAR(20) DEFAULT 'multiple',
+      min_type VARCHAR(20) DEFAULT 'amount',
+      min_qty INTEGER DEFAULT 0,
+      applicable_categories JSONB DEFAULT '[]',
+      applicable_product_codes JSONB DEFAULT '[]',
       created_at TIMESTAMP DEFAULT NOW()
     );
 
@@ -155,6 +161,18 @@ async function setup() {
 
     ALTER TABLE users ADD COLUMN IF NOT EXISTS role VARCHAR(20) DEFAULT 'user';
     ALTER TABLE addresses ADD COLUMN IF NOT EXISTS country VARCHAR(100);
+    ALTER TABLE orders 
+      ADD COLUMN IF NOT EXISTS payment_method VARCHAR(50),
+      ADD COLUMN IF NOT EXISTS advance_paid NUMERIC(10,2) DEFAULT 0,
+      ADD COLUMN IF NOT EXISTS order_type VARCHAR(50),
+      ADD COLUMN IF NOT EXISTS razorpay_order_id VARCHAR(100),
+      ADD COLUMN IF NOT EXISTS razorpay_payment_id VARCHAR(100),
+      ADD COLUMN IF NOT EXISTS razorpay_signature VARCHAR(255),
+      ADD COLUMN IF NOT EXISTS discount_amount NUMERIC(10,2) DEFAULT 0,
+      ADD COLUMN IF NOT EXISTS coupon_code VARCHAR(50),
+      ADD COLUMN IF NOT EXISTS shipping_fee NUMERIC(10,2) DEFAULT 0,
+      ADD COLUMN IF NOT EXISTS tax_amount NUMERIC(10,2) DEFAULT 0,
+      ADD COLUMN IF NOT EXISTS m_coins_used NUMERIC(10,2) DEFAULT 0;
   `);
 
   // Insert default shipping settings if not exists

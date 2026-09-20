@@ -75,9 +75,6 @@ export function ProductCard({ product, layout = 'grid', searchQuery = '' }) {
   const originalPrice = Number(defaultSize.mrp) || Number(defaultSize.our_price) || 0;
   
   let basePrice = Number(defaultSize.our_price) || originalPrice;
-  if (user?.role === 'shopkeeper' && defaultSize.shopkeeper_price) {
-    basePrice = Number(defaultSize.shopkeeper_price);
-  }
   
   let displayPrice = basePrice;
 
@@ -88,7 +85,7 @@ export function ProductCard({ product, layout = 'grid', searchQuery = '' }) {
     activeOffer = offers?.find((offer) => offer.id === product.offer_id && offer.is_active);
   }
   if (activeOffer) {
-    displayPrice = Math.round(originalPrice - (originalPrice * (activeOffer.discount_percentage / 100)));
+    displayPrice = Math.round(basePrice - (basePrice * (activeOffer.discount_percentage / 100)));
   }
 
   const totalStock = variants.reduce((sum, variant) => {

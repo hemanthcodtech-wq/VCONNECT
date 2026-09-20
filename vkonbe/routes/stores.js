@@ -16,12 +16,12 @@ router.get('/', async (req, res) => {
 // Create a new store
 router.post('/', async (req, res) => {
   try {
-    const { name, owner_name, email, phone, address } = req.body;
+    const { name, owner_name, email, phone, address, certificate_url } = req.body;
     if (!name) return res.status(400).json({ error: 'Store name is required' });
     
     const result = await pool.query(
-      'INSERT INTO stores (name, owner_name, email, phone, address) VALUES ($1, $2, $3, $4, $5) RETURNING *',
-      [name, owner_name || null, email || null, phone || null, address || '']
+      'INSERT INTO stores (name, owner_name, email, phone, address, certificate_url) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *',
+      [name, owner_name || null, email || null, phone || null, address || '', certificate_url || null]
     );
     res.status(201).json(result.rows[0]);
   } catch (err) {

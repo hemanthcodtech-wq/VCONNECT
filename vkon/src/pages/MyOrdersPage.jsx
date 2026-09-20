@@ -95,7 +95,7 @@ export function MyOrdersPage() {
 <html>
 <head><title>Invoice #${order.order_number || order.id}</title></head>
 <body style="font-family:sans-serif;max-width:700px;margin:auto;padding:20px;">
-<h2>Invoice - MSM ${order.order_number || order.id}</h2>
+<h2>Invoice - ${order.order_number || order.id}</h2>
 <p>Date: ${orderDate}</p>
 <table style="width:100%;border-collapse:collapse;">
   <thead><tr style="background:#08183A;"><th style="padding:10px;color:#D4AF37;">#</th><th style="padding:10px;color:#D4AF37;text-align:left;">Item</th><th style="padding:10px;color:#D4AF37;">Size</th><th style="padding:10px;color:#D4AF37;">Qty</th><th style="padding:10px;color:#D4AF37;text-align:right;">Unit</th><th style="padding:10px;color:#D4AF37;text-align:right;">Total</th></tr></thead>
@@ -209,7 +209,7 @@ export function MyOrdersPage() {
                   <div className="px-4 pt-4 pb-3">
                     {/* Order number + Status */}
                     <div className="flex items-center justify-between mb-1">
-                      <p className="text-sm font-bold text-gray-900">Order #MSM{order.order_number || order.id}</p>
+                      <p className="text-sm font-bold text-gray-900">Order #{order.order_number || order.id}</p>
                       <span className={`flex items-center gap-1 text-xs font-bold ${statusCfg.text}`}>
                         <span className={`w-2 h-2 rounded-full ${statusCfg.dot} inline-block`} />
                         {order.status === 'delivered' ? 'Delivered'

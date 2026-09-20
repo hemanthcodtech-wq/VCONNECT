@@ -122,17 +122,6 @@ export function CartPage() {
               My Cart ({items.reduce((s, i) => s + i.qty, 0)})
             </h1>
           </div>
-          <div 
-            onClick={fetchLocation}
-            className="md:bg-white/10 md:px-4 md:py-2 md:rounded-xl md:backdrop-blur-sm shadow-sm md:shadow-none bg-transparent cursor-pointer hover:bg-white/20 transition-colors"
-          >
-            <p className="text-xs font-semibold text-white/80 flex items-center gap-1">
-              Deliver to <ChevronDown className="w-3 h-3" />
-            </p>
-            <p className="text-sm font-bold text-white flex items-center gap-1 mt-0.5">
-              {isLoadingLocation ? 'Locating...' : locationName} <ChevronDown className="w-4 h-4" />
-            </p>
-          </div>
         </div>
       </div>
 

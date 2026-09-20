@@ -226,7 +226,7 @@ export function HomePage() {
       <Header variant="home" />
 
       {/* Mobile Top Section */}
-      <div className="md:hidden bg-brand-beige pt-[140px] pb-12 px-4 relative flex flex-col items-center">
+      <div className="md:hidden bg-brand-beige pt-[100px] pb-12 px-4 relative flex flex-col items-center">
         {banners.length > 0 ? (
           <div className="relative w-full h-[180px] rounded-[20px] overflow-hidden shadow-xl bg-gradient-to-br from-[#0033a0] to-emerald-900">
             <div

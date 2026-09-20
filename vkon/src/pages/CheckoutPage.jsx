@@ -173,7 +173,7 @@ const CARD_ELEMENT_OPTIONS = {
   },
 };
 
-function RazorpayPaymentForm({ isPlacingOrder, handlePlaceOrder, termsAccepted, setTermsAccepted, addressConfirmed, setAddressConfirmed, address, sessionSecondsLeft, onEditAddress, paymentError, onRetry }) {
+function RazorpayPaymentForm({ isPlacingOrder, handlePlaceOrder, termsAccepted, setTermsAccepted, addressConfirmed, setAddressConfirmed, address, sessionSecondsLeft, onEditAddress, paymentError, onRetry, isStoreOrder }) {
   const isExpiringSoon = sessionSecondsLeft !== null && sessionSecondsLeft <= 60;
   return (
     <div className="space-y-4 max-w-3xl mx-auto">
@@ -204,15 +204,19 @@ function RazorpayPaymentForm({ isPlacingOrder, handlePlaceOrder, termsAccepted, 
         <div className="text-xs text-green-900 leading-relaxed">
           <p className="font-bold">{address.name}</p>
           <p>{address.line1}{address.line2 ? `, ${address.line2}` : ''}</p>
-          <p>{address.city}{address.state ? `, ${address.state}` : ''} {address.pincode}</p>
-          <p>{address.country}</p>
+          {!isStoreOrder && (
+            <>
+              <p>{address.city}{address.state ? `, ${address.state}` : ''} {address.pincode}</p>
+              <p>{address.country}</p>
+            </>
+          )}
           <p className="text-green-700 mt-0.5">📞 {address.mobile}</p>
         </div>
-        {address.line2 ? null : (
+        {(!isStoreOrder && !address.line2) ? (
           <p className="text-[10px] text-amber-700 bg-amber-50 border border-amber-200 rounded-lg px-3 py-2">
             💡 No apartment/suite number provided. If applicable, please <button type="button" onClick={onEditAddress} className="underline font-bold">go back and add it</button> to ensure accurate delivery.
           </p>
-        )}
+        ) : null}
         <label className="flex items-start gap-2.5 cursor-pointer pt-1 border-t border-green-200">
           <input type="checkbox" checked={addressConfirmed} onChange={e => setAddressConfirmed(e.target.checked)}
             className="mt-0.5 w-4 h-4 accent-green-700 shrink-0" />
@@ -343,7 +347,18 @@ export function CheckoutPage() {
   const countryRef = useRef(null);
 
   useEffect(() => {
-    if (user) {
+    if (selectedStore) {
+      setAddress({
+        name: selectedStore.name || user?.name || '',
+        line1: selectedStore.address || '',
+        line2: '',
+        city: 'Store City',
+        state: 'Store State',
+        pincode: '000000',
+        country: 'India',
+        mobile: selectedStore.phone || user?.phone || ''
+      });
+    } else if (user) {
       let rawPhone = user.phone || '';
       let parsedCountry = 'IN';
       
@@ -364,7 +379,7 @@ export function CheckoutPage() {
       setAddress(prev => ({ ...prev, name: user.name || '', mobile: mobileDigits }));
       setDialCountryCode(parsedCountry);
     }
-  }, [user]);
+  }, [user, selectedStore]);
   useEffect(() => {
     const handler = (e) => {
       if (countryRef.current && !countryRef.current.contains(e.target)) setCountryOpen(false);
@@ -497,6 +512,8 @@ export function CheckoutPage() {
 
   // Auto-select saved address or show new form
   useEffect(() => {
+    if (selectedStore) return; // Do not override if managing a store
+
     if (addresses.length > 0) {
       const def = addresses.find(a => a.is_default) || addresses[0];
       setSelectedSavedAddress(def.id);
@@ -511,7 +528,7 @@ export function CheckoutPage() {
     } else {
       setShowNewAddressForm(true);
     }
-  }, [addresses]);
+  }, [addresses, selectedStore]);
 
   useGSAP(() => {
     if (orderSuccess) {
@@ -576,7 +593,7 @@ export function CheckoutPage() {
           })
         });
         const valData = await valRes.json();
-        if (!valData.valid) {
+        if (!valData.valid && !selectedStore) {
           showToast(valData.message || 'Address could not be validated. Please check and try again.', 'error');
           return;
         }
@@ -851,424 +868,33 @@ export function CheckoutPage() {
               Shipping Address
             </h2>
 
-            {/* Saved addresses list */}
-            {addresses.length > 0 && !showNewAddressForm && (
-              <div className="space-y-3">
-                {addresses.map(addr => (
-                  <div key={addr.id}>
-                    {editingAddr === addr.id ? (
-                      /* Inline edit form */
-                      <div className="bg-white rounded-2xl border-2 border-brand-blue/10 p-4 space-y-3">
-                        <div className="flex items-center justify-between mb-1">
-                          <p className="text-xs font-bold text-gray-900 uppercase tracking-wider">Edit Address</p>
-                          <button onClick={() => setEditingAddr(null)} className="w-6 h-6 bg-gray-100 rounded-full flex items-center justify-center hover:bg-gray-200">
-                            <X className="w-3.5 h-3.5 text-gray-500" />
-                          </button>
-                        </div>
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-                          {[['name','Full Name'],['line2','Line 2 (optional)'],['city','City'],['state','State'],['pincode','ZIP']].map(([key, label]) => (
-                            <div key={key} className={key === 'line2' ? 'sm:col-span-2' : ''}>
-                              <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider block mb-1">{label}</label>
-                              <input
-                                value={editForm[key] || ''}
-                                onChange={e => setEditForm(f => ({ ...f, [key]: e.target.value }))}
-                                className="w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-brand-blue/10 transition-all"
-                              />
-                            </div>
-                          ))}
-                          {/* Address Line 1 with autocomplete */}
-                          <div className="sm:col-span-2 order-first">
-                            <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider block mb-1">Address Line 1</label>
-                            {mapsLoaded ? (
-                              <AddressAutocomplete
-                                value={editForm.line1 || ''}
-                                onChange={v => setEditForm(f => ({ ...f, line1: v }))}
-                                onSelect={({ line1, city, state, pincode, country }) => {
-                                  const c = country ? COUNTRIES.find(c => c.name === country) : null;
-                                  setEditForm(f => ({
-                                    ...f,
-                                    line1: line1 || f.line1,
-                                    city: city || f.city,
-                                    state: state || f.state,
-                                    pincode: pincode || f.pincode,
-                                    country: country || f.country,
-                                  }));
-                                  if (c) setEditDialCode(c.code);
-                                }}
-                              />
-                            ) : (
-                              <input
-                                value={editForm.line1 || ''}
-                                onChange={e => setEditForm(f => ({ ...f, line1: e.target.value }))}
-                                className="w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-brand-blue/10 transition-all"
-                              />
-                            )}
-                          </div>
-                          {/* Country dropdown */}
-                          <div ref={editCountryRef} className="relative sm:col-span-2">
-                            <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider block mb-1">Country</label>
-                            <button type="button" onClick={() => { setEditCountryOpen(o => !o); setEditCountrySearch(''); }}
-                              className="w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 text-sm flex items-center gap-2 justify-between focus:outline-none focus:border-brand-blue/10 transition-all">
-                              <div className="flex items-center gap-2 min-w-0">
-                                {editForm.country && (() => { const c = COUNTRIES.find(c => c.name === editForm.country); return c ? <span>{flag(c.code)}</span> : null; })()}
-                                <span className={`truncate ${editForm.country ? 'text-gray-700' : 'text-gray-400'}`}>{editForm.country || 'Select country'}</span>
-                              </div>
-                              <svg className={`w-3 h-3 text-gray-400 transition-transform shrink-0 ${editCountryOpen ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
-                            </button>
-                            {editCountryOpen && (
-                              <div className="absolute z-50 mt-1 w-full bg-white border border-gray-200 rounded-xl shadow-xl overflow-hidden">
-                                <div className="p-2 border-b border-gray-100">
-                                  <input autoFocus type="text" value={editCountrySearch} onChange={e => setEditCountrySearch(e.target.value)}
-                                    placeholder="Search country..." className="w-full bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-brand-blue/10" />
-                                </div>
-                                <ul className="max-h-48 overflow-y-auto">
-                                  {COUNTRIES.filter(c => c.name.toLowerCase().includes(editCountrySearch.toLowerCase())).map(c => (
-                                    <li key={c.code}>
-                                      <button type="button" onClick={() => {
-                                        setEditForm(f => ({ ...f, country: c.name }));
-                                        setEditDialCode(c.code);
-                                        setEditCountryOpen(false);
-                                      }} className={`w-full text-left px-3 py-2 text-sm flex items-center gap-2.5 transition-colors ${
-                                        editForm.country === c.name ? 'bg-brand-blue text-white/10 font-bold text-gray-900' : 'text-gray-700 hover:bg-gray-50'}`}>
-                                        <span>{flag(c.code)}</span>
-                                        <span className="flex-1 truncate">{c.name}</span>
-                                        <span className="text-gray-400 font-mono text-xs shrink-0">{c.dial}</span>
-                                      </button>
-                                    </li>
-                                  ))}
-                                </ul>
-                              </div>
-                            )}
-                          </div>
-                          {/* Phone with dial code picker */}
-                          <div className="sm:col-span-2">
-                            <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider block mb-1">Phone</label>
-                            <div className="flex gap-2">
-                              <div ref={editDialRef} className="relative shrink-0">
-                                <button type="button" onClick={() => { setEditDialOpen(o => !o); setEditDialSearch(''); }}
-                                  className="h-full min-w-[80px] bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 text-sm flex items-center gap-1.5 focus:outline-none focus:border-brand-blue/10 hover:border-brand-blue/10 transition-all">
-                                  <span>{flag(editDialCode)}</span>
-                                  <span className="font-bold text-gray-700 text-xs">{COUNTRIES.find(c => c.code === editDialCode)?.dial || '+1'}</span>
-                                  <svg className={`w-3 h-3 text-gray-400 transition-transform shrink-0 ${editDialOpen ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
-                                </button>
-                                {editDialOpen && (
-                                  <div className="absolute z-50 mt-1 left-0 w-64 bg-white border border-gray-200 rounded-xl shadow-xl overflow-hidden">
-                                    <div className="p-2 border-b border-gray-100">
-                                      <input autoFocus type="text" value={editDialSearch} onChange={e => setEditDialSearch(e.target.value)}
-                                        placeholder="Search country..." className="w-full bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-brand-blue/10" />
-                                    </div>
-                                    <ul className="max-h-48 overflow-y-auto">
-                                      {COUNTRIES.filter(c => c.name.toLowerCase().includes(editDialSearch.toLowerCase()) || c.dial.includes(editDialSearch)).map(c => (
-                                        <li key={c.code}>
-                                          <button type="button" onClick={() => { setEditDialCode(c.code); setEditDialOpen(false); }}
-                                            className={`w-full text-left px-3 py-2 text-sm flex items-center gap-2.5 transition-colors ${
-                                              editDialCode === c.code ? 'bg-brand-blue text-white/10 font-bold text-gray-900' : 'text-gray-700 hover:bg-gray-50'}`}>
-                                            <span>{flag(c.code)}</span>
-                                            <span className="flex-1 truncate">{c.name}</span>
-                                            <span className="text-gray-400 font-mono text-xs shrink-0">{c.dial}</span>
-                                          </button>
-                                        </li>
-                                      ))}
-                                    </ul>
-                                  </div>
-                                )}
-                              </div>
-                              <input type="text" inputMode="numeric"
-                                value={editForm.mobile || ''}
-                                onChange={e => setEditForm(f => ({ ...f, mobile: e.target.value.replace(/\D/g, '').slice(0, 15) }))}
-                                placeholder="Phone number"
-                                className="flex-1 bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-brand-blue/10 transition-all"
-                              />
-                            </div>
-                          </div>
-                        </div>
-                        <button onClick={saveEdit} disabled={savingEdit}
-                          className="w-full bg-white text-brand-blue font-bold text-sm rounded-xl py-2.5 flex items-center justify-center gap-2 hover:opacity-90 transition-all disabled:opacity-50">
-                          {savingEdit ? <><div className="w-4 h-4 border-2 border-white/20 border-t-white rounded-full animate-spin" /> Saving...</> : <><Check className="w-4 h-4" /> Save Changes</>}
-                        </button>
-                      </div>
-                    ) : (
-                      <button
-                        type="button"
-                        onClick={() => {
-                          setSelectedSavedAddress(addr.id);
-                          const c = COUNTRIES.find(c => c.name === addr.country);
-                          if (c) setDialCountryCode(c.code);
-                          const dialPrefix = c?.dial || '';
-                          const rawMobile = addr.mobile || '';
-                          const mobileDigits = rawMobile.startsWith(dialPrefix) ? rawMobile.slice(dialPrefix.length) : rawMobile;
-                          setAddress({ name: addr.name, line1: addr.line1, line2: addr.line2 || '', city: addr.city, state: addr.state || '', pincode: addr.pincode, country: addr.country || 'United States', mobile: mobileDigits });
-                        }}
-                        className={`w-full text-left p-4 rounded-2xl border-2 transition-all flex items-start gap-3 ${
-                          selectedSavedAddress === addr.id ? 'border-brand-blue bg-red-50 text-brand-blue' : 'border-gray-200 bg-white hover:border-brand-blue/10'
-                        }`}
-                      >
-                        <div className={`w-5 h-5 rounded-full border-2 shrink-0 mt-0.5 flex items-center justify-center ${
-                          selectedSavedAddress === addr.id ? 'border-brand-blue bg-brand-blue text-white' : 'border-gray-300'
-                        }`}>
-                          {selectedSavedAddress === addr.id && <div className="w-2 h-2 rounded-full bg-white" />}
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <div className="flex items-center gap-2">
-                            <p className="text-sm font-bold text-gray-900">{addr.name}</p>
-                            {addr.is_default && <span className="text-[10px] bg-green-100 text-green-700 font-bold px-2 py-0.5 rounded-full">Default</span>}
-                          </div>
-                          <p className="text-xs text-gray-500 mt-0.5">{addr.line1}{addr.line2 ? `, ${addr.line2}` : ''}, {addr.city}{addr.state ? `, ${addr.state}` : ''} {addr.pincode}</p>
-                          <p className="text-xs text-gray-400 mt-0.5">📞 {addr.mobile}</p>
-                        </div>
-                        <button
-                          type="button"
-                          onClick={e => { e.stopPropagation(); openEdit(addr); }}
-                          className="shrink-0 w-7 h-7 bg-blue-50 hover:bg-blue-100 rounded-lg flex items-center justify-center transition-colors"
-                        >
-                          <Pencil className="w-3.5 h-3.5 text-blue-500" />
-                        </button>
-                      </button>
-                    )}
-                  </div>
-                ))}
-                <button
-                  type="button"
-                  onClick={() => { setSelectedSavedAddress(null); setShowNewAddressForm(true); setAddress({ name: user?.name || '', line1: '', line2: '', city: '', state: '', pincode: '', country: 'United States', mobile: '' }); }}
-                  className="w-full text-left p-4 rounded-2xl border-2 border-dashed border-gray-200 bg-white hover:border-brand-blue/10 transition-all flex items-center gap-3 text-gray-900/60 hover:text-gray-900"
-                >
-                  <div className="w-5 h-5 rounded-full border-2 border-gray-300 shrink-0" />
-                  <span className="text-sm font-semibold">+ Use a different address</span>
-                </button>
+            {/* Store Address Only */}
+            <div className="bg-white rounded-2xl border-2 border-brand-blue/10 p-5 space-y-3">
+              <div className="flex items-center justify-between mb-1">
+                <p className="text-xs font-bold text-gray-900 uppercase tracking-wider">Store Shipping Address</p>
+                <div className="px-2 py-1 bg-green-100 text-green-800 text-[10px] font-bold rounded-lg uppercase tracking-wider">Verified</div>
               </div>
-            )}
-
-            {/* New address form */}
-            {showNewAddressForm && (
-            <div className="bg-white rounded-2xl shadow-sm border border-brand-blue/10">
-              {addresses.length > 0 && (
-                <div className="px-4 pt-4 sm:px-6">
-                  <button type="button" onClick={() => { setShowNewAddressForm(false); const def = addresses.find(a => a.is_default) || addresses[0]; setSelectedSavedAddress(def.id); }}
-                    className="text-xs font-bold text-brand-blue flex items-center gap-1 hover:underline">
-                    ← Back to saved addresses
-                  </button>
-                </div>
-              )}
-              <div className="p-4 sm:p-6 space-y-4">
-                {/* Full Name */}
-                <div>
-                  <label className="text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-1.5 block">Full Name *</label>
-                  <input
-                    required
-                    value={address.name}
-                    onChange={e => { setAddress({...address, name: e.target.value}); setFieldErrors(f => ({...f, name: ''})); }}
-                    className={`w-full bg-gray-50 border rounded-xl px-4 py-3 text-sm font-semibold text-gray-900 placeholder:text-gray-400 focus:outline-none transition-all ${
-                      fieldErrors.name ? 'border-red-400 focus:border-red-400 focus:ring-1 focus:ring-red-300' : 'border-gray-200 focus:border-brand-blue/10 focus:ring-1 focus:ring-brand-gold/30'
-                    }`}
-                    placeholder="Enter your full name"
-                  />
-                  {fieldErrors.name && <p className="text-[10px] text-red-500 mt-1 font-medium">{fieldErrors.name}</p>}
-                </div>
-
-                {/* Address Line 1 */}
-                <div>
-                  <label className="text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-1.5 block">Address Line 1 *</label>
-                  {mapsLoaded ? (
-                    <div className={fieldErrors.line1 ? 'rounded-xl ring-1 ring-red-400' : ''}>
-                      <AddressAutocomplete
-                        value={address.line1}
-                        onChange={v => { setAddress(a => ({ ...a, line1: v })); setFieldErrors(f => ({...f, line1: ''})); }}
-                        onSelect={({ line1, city, state, pincode, country }) => {
-                          setAddress(a => ({ ...a, line1: line1 || a.line1, city: city || a.city, state: state || a.state, pincode: pincode || a.pincode, country: country || a.country }));
-                          setFieldErrors(f => ({...f, line1: '', city: '', pincode: '', country: ''}));
-                        }}
-                      />
-                    </div>
-                  ) : (
-                    <input
-                      value={address.line1}
-                      onChange={e => { setAddress(a => ({ ...a, line1: e.target.value })); setFieldErrors(f => ({...f, line1: ''})); }}
-                      placeholder="House no., Street, Area"
-                      className={`w-full bg-gray-50 border rounded-xl px-4 py-3 text-sm text-gray-700 placeholder:text-gray-400 focus:outline-none transition-all ${
-                        fieldErrors.line1 ? 'border-red-400 focus:border-red-400 focus:ring-1 focus:ring-red-300' : 'border-gray-200 focus:border-brand-blue/10 focus:ring-1 focus:ring-brand-gold/30'
-                      }`}
-                    />
-                  )}
-                  {fieldErrors.line1 && <p className="text-[10px] text-red-500 mt-1 font-medium">{fieldErrors.line1}</p>}
-                  <p className="text-[10px] text-gray-400 mt-1 flex items-center gap-1">
-                    <svg className="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                    Selecting a suggestion auto-fills city, state, ZIP & country
-                  </p>
-                </div>
-
-                {/* Apartment */}
-                <div>
-                  <label className="text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-1.5 block">Apartment, suite, etc. (optional)</label>
-                  <input
-                    value={address.line2}
-                    onChange={e => setAddress(a => ({ ...a, line2: e.target.value }))}
-                    placeholder="Apartment, suite, unit, building, floor, etc."
-                    className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm text-gray-700 placeholder:text-gray-400 focus:outline-none focus:border-brand-blue/10 focus:ring-1 focus:ring-brand-gold/30 transition-all"
-                  />
-                </div>
-
-                {/* City + State */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  <div>
-                    <label className="text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-1.5 block">City *</label>
-                    <input required value={address.city} onChange={e => { setAddress({...address, city: e.target.value}); setFieldErrors(f => ({...f, city: ''})); }}
-                      className={`w-full bg-gray-50 border rounded-xl px-4 py-3 text-sm text-gray-700 placeholder:text-gray-400 focus:outline-none transition-all ${
-                        fieldErrors.city ? 'border-red-400 focus:border-red-400 focus:ring-1 focus:ring-red-300' : 'border-gray-200 focus:border-brand-blue/10 focus:ring-1 focus:ring-brand-gold/30'
-                      }`}
-                      placeholder="City" />
-                    {fieldErrors.city && <p className="text-[10px] text-red-500 mt-1 font-medium">{fieldErrors.city}</p>}
-                  </div>
-                  <div>
-                    <label className="text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-1.5 block">State <span className="text-gray-400 font-normal">*</span></label>
-                    <input value={address.state} onChange={e => setAddress({...address, state: e.target.value})}
-                      className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm text-gray-700 placeholder:text-gray-400 focus:outline-none focus:border-brand-blue/10 focus:ring-1 focus:ring-brand-gold/30 transition-all"
-                      placeholder="State" />
-                      
-                  </div>
-                </div>
-
-                {/* ZIP + Phone */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  <div>
-                    <label className="text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-1.5 block">ZIP Code *</label>
-                    <input type="text" inputMode="numeric" required value={address.pincode}
-                      onChange={e => { setAddress({...address, pincode: e.target.value}); setFieldErrors(f => ({...f, pincode: ''})); }}
-                      className={`w-full bg-gray-50 border rounded-xl px-4 py-3 text-sm text-gray-700 placeholder:text-gray-400 focus:outline-none transition-all ${
-                        fieldErrors.pincode ? 'border-red-400 focus:border-red-400 focus:ring-1 focus:ring-red-300' : 'border-gray-200 focus:border-brand-blue/10 focus:ring-1 focus:ring-brand-gold/30'
-                      }`}
-                      placeholder="ZIP / Postal code" />
-                    {fieldErrors.pincode && <p className="text-[10px] text-red-500 mt-1 font-medium">{fieldErrors.pincode}</p>}
-                  </div>
-                  <div>
-                    <label className="text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-1.5 block">Phone *</label>
-                    <div className="flex gap-2">
-                      <div ref={dialRef} className="relative shrink-0">
-                        <button type="button" onClick={() => { setDialOpen(o => !o); setDialSearch(''); }}
-                          className="h-full min-w-[80px] bg-gray-50 border border-gray-200 rounded-xl px-3 py-3 text-sm flex items-center gap-1.5 focus:outline-none focus:border-brand-blue/10 hover:border-brand-blue/10 transition-all">
-                          <span>{flag(dialCountryCode)}</span>
-                          <span className="font-bold text-gray-700">{dialCode}</span>
-                          <svg className={`w-3 h-3 text-gray-400 transition-transform shrink-0 ${dialOpen ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
-                        </button>
-                        {dialOpen && (
-                          <div className="absolute z-50 mt-1 left-0 w-64 bg-white border border-gray-200 rounded-xl shadow-xl overflow-hidden">
-                            <div className="p-2 border-b border-gray-100">
-                              <input autoFocus type="text" value={dialSearch} onChange={e => setDialSearch(e.target.value)}
-                                placeholder="Search country..." className="w-full bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-brand-blue/10" />
-                            </div>
-                            <ul className="max-h-52 overflow-y-auto">
-                              {displayCountries.filter(c => c.name.toLowerCase().includes(dialSearch.toLowerCase()) || c.dial.includes(dialSearch)).map(c => (
-                                <li key={c.code}>
-                                  <button type="button" onClick={() => { setDialCountryCode(c.code); setDialOpen(false); }}
-                                    className={`w-full text-left px-3 py-2.5 text-sm flex items-center gap-2.5 transition-colors ${
-                                      dialCountryCode === c.code ? 'bg-brand-blue text-white/10 font-bold text-gray-900' : 'text-gray-700 hover:bg-gray-50'}`}>
-                                    <span className="text-base">{flag(c.code)}</span>
-                                    <span className="flex-1 truncate">{c.name}</span>
-                                    <span className="text-gray-400 font-mono text-xs shrink-0">{c.dial}</span>
-                                  </button>
-                                </li>
-                              ))}
-                            </ul>
-                          </div>
-                        )}
-                      </div>
-                      <input type="text" inputMode="numeric" required value={address.mobile}
-                        maxLength={['IN', 'US', 'CA'].includes(dialCountryCode) ? 10 : 15}
-                        onChange={e => { const limit = ['IN', 'US', 'CA'].includes(dialCountryCode) ? 10 : 15; setAddress({...address, mobile: e.target.value.replace(/\D/g, '').slice(0, limit)}); setFieldErrors(f => ({...f, mobile: ''})); }}
-                        className={`flex-1 bg-gray-50 border rounded-xl px-4 py-3 text-sm text-gray-700 placeholder:text-gray-400 focus:outline-none transition-all ${
-                          fieldErrors.mobile ? 'border-red-400 focus:border-red-400 focus:ring-1 focus:ring-red-300' : 'border-gray-200 focus:border-brand-blue/10 focus:ring-1 focus:ring-brand-gold/30'
-                        }`}
-                        placeholder={['IN', 'US', 'CA'].includes(dialCountryCode) ? '10-digit number' : 'Phone number'} />
-                    </div>
-                    {fieldErrors.mobile && <p className="text-[10px] text-red-500 mt-1 font-medium">{fieldErrors.mobile}</p>}
-                  </div>
-                </div>
-
-                {/* Country */}
-                <div ref={countryRef} className="relative">
-                  <label className="text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-1.5 block">Country *</label>
-                  <button type="button" onClick={() => { setCountryOpen(o => !o); setCountrySearch(''); }}
-                    className={`w-full bg-gray-50 border rounded-xl px-4 py-3 text-sm text-gray-700 focus:outline-none transition-all flex items-center gap-2 justify-between ${
-                      fieldErrors.country ? 'border-red-400' : 'border-gray-200 focus:border-brand-blue/10 focus:ring-1 focus:ring-brand-gold/30'
-                    }`}>
-                    <div className="flex items-center gap-2 min-w-0">
-                      {address.country && (() => { const c = COUNTRIES.find(c => c.name === address.country); return c ? <span className="text-base shrink-0">{flag(c.code)}</span> : null; })()}
-                      <span className={`truncate ${address.country ? 'text-gray-700' : 'text-gray-400'}`}>{address.country || 'Select country'}</span>
-                    </div>
-                    <svg className={`w-4 h-4 text-gray-400 transition-transform shrink-0 ${countryOpen ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
-                  </button>
-                  {countryOpen && (
-                    <div className="absolute z-[200] bottom-full mb-1 w-full bg-white border border-gray-200 rounded-xl shadow-2xl overflow-hidden">
-                      <div className="p-2 border-b border-gray-100">
-                        <input autoFocus type="text" value={countrySearch} onChange={e => setCountrySearch(e.target.value)}
-                          placeholder="Search country..." className="w-full bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-brand-blue/10" />
-                      </div>
-                      <ul className="max-h-52 overflow-y-auto">
-                        {displayCountries.filter(c => c.name.toLowerCase().includes(countrySearch.toLowerCase())).map(c => (
-                          <li key={c.code}>
-                            <button type="button" onClick={() => { setAddress({...address, country: c.name}); setDialCountryCode(c.code); setCountryOpen(false); setFieldErrors(f => ({...f, country: ''})); }}
-                              className={`w-full text-left px-3 py-2.5 text-sm flex items-center gap-2.5 transition-colors ${
-                                address.country === c.name ? 'bg-brand-blue text-white/10 text-gray-900 font-bold' : 'text-gray-700 hover:bg-gray-50'}`}>
-                              <span className="text-base shrink-0">{flag(c.code)}</span>
-                              <span className="flex-1 truncate">{c.name}</span>
-                              <span className="text-gray-400 font-mono text-xs shrink-0">{c.dial}</span>
-                            </button>
-                          </li>
-                        ))}
-                        {displayCountries.filter(c => c.name.toLowerCase().includes(countrySearch.toLowerCase())).length === 0 && (
-                          <li className="px-4 py-3 text-sm text-gray-400 text-center">No country found</li>
-                        )}
-                      </ul>
-                    </div>
-                  )}
-                  {fieldErrors.country && <p className="text-[10px] text-red-500 mt-1 font-medium">{fieldErrors.country}</p>}
-                </div>
-
-                {/* Save address checkboxes */}
-                {token && (
-                  <div className="space-y-2 pt-1">
-                    <label className="flex items-center gap-2.5 cursor-pointer">
-                      <input type="checkbox" checked={saveAddress} onChange={e => setSaveAddress(e.target.checked)}
-                        className="w-4 h-4 accent-brand-dark-blue rounded" />
-                      <span className="text-xs text-gray-600 font-medium">Save this address for future orders</span>
-                    </label>
-                    {saveAddress && (
-                      <label className="flex items-center gap-2.5 cursor-pointer pl-6">
-                        <input type="checkbox" checked={saveAsDefault} onChange={e => setSaveAsDefault(e.target.checked)}
-                          className="w-4 h-4 accent-brand-dark-blue rounded" />
-                        <span className="text-xs text-gray-600">Set as default address</span>
-                      </label>
-                    )}
-                  </div>
-                )}
+              <div className="text-sm text-gray-700 leading-relaxed">
+                <p className="font-bold text-gray-900 text-base mb-1">{address.name}</p>
+                <p>{address.line1}</p>
+                <p className="mt-2 text-gray-500 font-medium flex items-center gap-1.5"><svg className="w-4 h-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" /></svg> {address.mobile}</p>
               </div>
-
-              {/* Proceed button inside card on mobile */}
-              <div className="px-4 pb-4 sm:px-6 sm:pb-6">
-                <button onClick={handleProceedToPayment}
-                  className="w-full bg-brand-blue text-white font-bold text-sm rounded-xl py-4 shadow-lg hover:shadow-xl hover:bg-brand-blue/90 transition-all flex items-center justify-center gap-2">
-                  <CreditCard className="w-4 h-4" /> Proceed to Payment
-                </button>
-                <div className="flex items-center justify-center gap-1.5 mt-3">
-                  <ShieldCheck className="w-3.5 h-3.5 text-gray-400" />
-                  <span className="text-[11px] text-gray-400">100% Secure Transaction</span>
-                </div>
+              <div className="mt-3 pt-3 border-t border-gray-100 text-xs text-gray-400">
+                This is the registered address for your store. Orders will be shipped here automatically.
               </div>
             </div>
-            )}
 
-            {/* Proceed button when using saved address */}
-            {!showNewAddressForm && addresses.length > 0 && (
-              <div className="space-y-3">
-                <button onClick={handleProceedToPayment}
-                  className="w-full bg-brand-blue text-white font-bold text-sm rounded-xl py-4 shadow-lg hover:shadow-xl hover:bg-brand-blue/90 transition-all flex items-center justify-center gap-2">
-                  <CreditCard className="w-4 h-4" /> Proceed to Payment
-                </button>
-                <div className="flex items-center justify-center gap-1.5">
-                  <ShieldCheck className="w-3.5 h-3.5 text-gray-400" />
-                  <span className="text-[11px] text-gray-400">100% Secure Transaction</span>
-                </div>
+            {/* Proceed button */}
+            <div className="space-y-3">
+              <button onClick={handleProceedToPayment}
+                className="w-full bg-brand-blue text-white font-bold text-sm rounded-xl py-4 shadow-lg hover:shadow-xl hover:bg-brand-blue/90 transition-all flex items-center justify-center gap-2">
+                <CreditCard className="w-4 h-4" /> Proceed to Payment
+              </button>
+              <div className="flex items-center justify-center gap-1.5">
+                <ShieldCheck className="w-3.5 h-3.5 text-gray-400" />
+                <span className="text-[11px] text-gray-400">100% Secure Transaction</span>
               </div>
-            )}
+            </div>
           </div>
         )}
         {step === 3 && orderType === 'pickup' && (
@@ -1430,6 +1056,7 @@ export function CheckoutPage() {
         )}
         {step === 3 && orderType !== 'pickup' && (
           <RazorpayPaymentForm
+            isStoreOrder={!!selectedStore}
             isPlacingOrder={isPlacingOrder}
             handlePlaceOrder={handlePlaceOrder}
             termsAccepted={termsAccepted}

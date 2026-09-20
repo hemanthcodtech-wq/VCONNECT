@@ -87,7 +87,7 @@ router.delete('/users/:id', authMiddleware, adminOnly, async (req, res) => {
 router.get('/orders', authMiddleware, adminOnly, async (req, res) => {
   try {
     const result = await pool.query(
-      `SELECT o.*, u.name as user_name, u.email as user_email, e.name as employee_name, s.name as store_name
+      `SELECT o.*, u.name as user_name, u.email as user_email, e.name as employee_name, s.name as store_name, s.email as store_email
        FROM orders o 
        LEFT JOIN users u ON o.user_id = u.id
        LEFT JOIN users e ON o.employee_id = e.id

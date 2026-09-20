@@ -12,8 +12,9 @@ export function AdminStoresPage() {
 
   // Add Store Modal
   const [showAddModal, setShowAddModal] = useState(false);
-  const [newStore, setNewStore] = useState({ name: '', owner_name: '', email: '', phone: '', address: '' });
+  const [newStore, setNewStore] = useState({ name: '', owner_name: '', email: '', phone: '', address: '', certificate_url: '' });
   const [adding, setAdding] = useState(false);
+  const [uploadingImage, setUploadingImage] = useState(false);
 
   useEffect(() => {
     fetchStores();
@@ -27,6 +28,33 @@ export function AdminStoresPage() {
       .then((d) => { if (Array.isArray(d)) setStores(d); })
       .catch(() => {})
       .finally(() => setLoading(false));
+  };
+
+  const handleImageUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const token = localStorage.getItem("token");
+    const formData = new FormData();
+    formData.append("image", file);
+    
+    setUploadingImage(true);
+    try {
+      const res = await fetch(`${BACKEND_URL}/admin/upload`, {
+        method: "POST",
+        headers: { Authorization: `Bearer ${token}` },
+        body: formData,
+      });
+      const data = await res.json();
+      if (res.ok) {
+        setNewStore({ ...newStore, certificate_url: data.url });
+      } else {
+        alert(data.error || "Failed to upload image");
+      }
+    } catch (err) {
+      alert(err.message);
+    } finally {
+      setUploadingImage(false);
+    }
   };
 
   const handleAddStore = async (e) => {
@@ -43,7 +71,7 @@ export function AdminStoresPage() {
       if (res.ok) {
         setStores([data, ...stores]);
         setShowAddModal(false);
-        setNewStore({ name: '', owner_name: '', email: '', phone: '', address: '' });
+        setNewStore({ name: '', owner_name: '', email: '', phone: '', address: '', certificate_url: '' });
       } else {
         alert(data.error || "Failed to add store");
       }
@@ -131,9 +159,15 @@ export function AdminStoresPage() {
                   {/* Name */}
                   <td className="py-4 px-4 sm:px-6">
                     <div className="flex items-center gap-3">
-                      <div className="w-8 h-8 rounded-lg bg-orange-100 text-orange-600 flex items-center justify-center font-bold shrink-0">
-                        <Store className="w-4 h-4" />
-                      </div>
+                      {store.certificate_url ? (
+                        <a href={store.certificate_url} target="_blank" rel="noopener noreferrer" className="shrink-0 cursor-pointer hover:opacity-80 transition-opacity">
+                          <img src={store.certificate_url} alt={store.name} className="w-8 h-8 rounded-lg object-cover border border-brand-blue/10" />
+                        </a>
+                      ) : (
+                        <div className="w-8 h-8 rounded-lg bg-orange-100 text-orange-600 flex items-center justify-center font-bold shrink-0">
+                          <Store className="w-4 h-4" />
+                        </div>
+                      )}
                       <div>
                         <span className="font-semibold text-gray-900 block">{store.name || "Unknown Store"}</span>
                         {store.owner_name && <span className="text-xs text-gray-900/60 font-medium">By {store.owner_name}</span>}
@@ -227,9 +261,22 @@ export function AdminStoresPage() {
                 <label className="block text-xs font-bold text-gray-900 uppercase tracking-wider mb-2">Store Address</label>
                 <textarea required value={newStore.address} onChange={e => setNewStore({...newStore, address: e.target.value})} rows={3} className="w-full px-4 py-3 bg-[#FDF8F0] border border-brand-blue/10 rounded-xl text-sm focus:outline-none focus:border-[#F29D38] resize-none" placeholder="Enter full store address..." />
               </div>
+
+              <div>
+                <label className="block text-xs font-bold text-gray-900 uppercase tracking-wider mb-2">Shop Establishment Certificate / Store Image</label>
+                <div className="flex items-center gap-4">
+                  <label className={`cursor-pointer bg-[#FDF8F0] border border-brand-blue/10 rounded-xl px-4 py-3 text-sm flex items-center justify-center gap-2 hover:border-[#F29D38] transition-colors ${uploadingImage ? 'opacity-50 pointer-events-none' : ''}`}>
+                    <input type="file" accept="image/*" className="hidden" onChange={handleImageUpload} />
+                    <span className="font-semibold text-gray-700">{uploadingImage ? 'Uploading...' : 'Upload Image'}</span>
+                  </label>
+                  {newStore.certificate_url && (
+                    <img src={newStore.certificate_url} alt="Certificate" className="w-12 h-12 rounded-lg object-cover border border-gray-200" />
+                  )}
+                </div>
+              </div>
               
               <div className="pt-2">
-                <button type="submit" disabled={adding} className="w-full bg-[#0033a0] text-white font-bold py-3 rounded-xl hover:bg-[#002277] transition-all disabled:opacity-50">
+                <button type="submit" disabled={adding || uploadingImage} className="w-full bg-[#0033a0] text-white font-bold py-3 rounded-xl hover:bg-[#002277] transition-all disabled:opacity-50">
                   {adding ? 'Adding...' : 'Add Store'}
                 </button>
               </div>

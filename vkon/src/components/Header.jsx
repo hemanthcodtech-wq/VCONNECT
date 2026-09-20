@@ -195,13 +195,7 @@ function DesktopFullHeader({ cartCount, wishlistCount, token, user, handleLogout
                   <span className="font-serif font-bold text-xl leading-none tracking-[0.1em] text-white whitespace-nowrap block">VConnect</span>
                 </Link>
                 
-                {/* Desktop Deliver To */}
-                <div className="hidden lg:flex items-center gap-1 cursor-pointer hover:bg-black/10 rounded transition-colors mt-1 py-0.5 -ml-1 pl-1 w-fit" onClick={fetchLocation}>
-                  <MapPin className="w-3 h-3 text-white/80 shrink-0" />
-                  <span className="text-white/80 text-[10px] font-semibold whitespace-nowrap">Deliver to:</span>
-                  <span className="text-white text-[11px] font-bold max-w-[130px] truncate">{isLoadingLocation ? 'Fetching...' : locationName}</span>
-                  <ChevronDown className="w-3 h-3 text-white shrink-0" />
-                </div>
+
               </div>
             </div>
           </div>
@@ -583,14 +577,7 @@ export function Header({ variant = 'default', title, showShare = false }) {
                   </Link>
                 </div>
               </div>
-              <div className="flex flex-col cursor-pointer" onClick={fetchLocation}>
-                <div className="flex items-center gap-1 text-white/80 text-xs font-semibold mb-0.5">
-                  Deliver to <ChevronDown className="w-3 h-3" />
-                </div>
-                <div className="flex items-center gap-1 text-white text-sm font-bold truncate">
-                  {isLoadingLocation ? 'Fetching location...' : locationName}
-                </div>
-              </div>
+
               <form 
                 onSubmit={(e) => {
                   e.preventDefault();

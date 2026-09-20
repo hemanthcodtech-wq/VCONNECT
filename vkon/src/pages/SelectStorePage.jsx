@@ -12,8 +12,10 @@ export function SelectStorePage() {
   
   const { stores, fetchStores, setSelectedStore, createStore, user } = useAuthStore();
   const [isCreating, setIsCreating] = useState(false);
-  const [newStore, setNewStore] = useState({ name: '', owner_name: '', email: '', phone: '', address: '' });
+  const [newStore, setNewStore] = useState({ name: '', owner_name: '', email: '', phone: '', address: '', certificate_url: '' });
   const [searchQuery, setSearchQuery] = useState('');
+  const [uploadingImage, setUploadingImage] = useState(false);
+  const [creating, setCreating] = useState(false);
 
   useEffect(() => {
     fetchStores();
@@ -24,13 +26,42 @@ export function SelectStorePage() {
     navigate(redirect);
   };
 
+  const handleImageUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const token = localStorage.getItem("token");
+    const formData = new FormData();
+    formData.append("image", file);
+    
+    setUploadingImage(true);
+    try {
+      const res = await fetch(`${import.meta.env.VITE_BACKEND_URL || "http://localhost:5000/api"}/admin/upload`, {
+        method: "POST",
+        headers: { Authorization: `Bearer ${token}` },
+        body: formData,
+      });
+      const data = await res.json();
+      if (res.ok) {
+        setNewStore({ ...newStore, certificate_url: data.url });
+      } else {
+        alert(data.error || "Failed to upload image");
+      }
+    } catch (err) {
+      alert(err.message);
+    } finally {
+      setUploadingImage(false);
+    }
+  };
+
   const handleCreate = async (e) => {
     e.preventDefault();
     if (!newStore.name.trim()) return;
+    setCreating(true);
     const store = await createStore(newStore);
     if (store) {
       handleSelect(store);
     }
+    setCreating(false);
   };
 
   const filteredStores = stores.filter(store => 
@@ -166,6 +197,19 @@ export function SelectStorePage() {
               />
             </div>
 
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-1">Shop Establishment Certificate / Store Image</label>
+              <div className="flex items-center gap-4">
+                <label className={`cursor-pointer bg-white border border-gray-200 rounded-xl px-4 py-3 text-sm flex items-center justify-center gap-2 hover:border-brand-blue transition-colors ${uploadingImage ? 'opacity-50 pointer-events-none' : ''}`}>
+                  <input type="file" accept="image/*" className="hidden" onChange={handleImageUpload} />
+                  <span className="font-semibold text-gray-700">{uploadingImage ? 'Uploading...' : 'Upload Image'}</span>
+                </label>
+                {newStore.certificate_url && (
+                  <img src={newStore.certificate_url} alt="Certificate" className="w-12 h-12 rounded-lg object-cover border border-gray-200" />
+                )}
+              </div>
+            </div>
+
             <div className="flex gap-3 pt-2">
               <button
                 type="button"
@@ -176,9 +220,10 @@ export function SelectStorePage() {
               </button>
               <button
                 type="submit"
-                className="flex-1 py-3.5 rounded-xl bg-gradient-to-r from-brand-blue to-green-700 text-white font-bold hover:shadow-lg transition-all"
+                disabled={uploadingImage || creating}
+                className="flex-1 py-3.5 rounded-xl bg-gradient-to-r from-brand-blue to-green-700 text-white font-bold hover:shadow-lg transition-all disabled:opacity-50"
               >
-                Create & Select
+                {creating ? 'Creating...' : 'Create & Select'}
               </button>
             </div>
           </form>

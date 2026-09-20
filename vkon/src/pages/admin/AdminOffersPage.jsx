@@ -1,8 +1,19 @@
 import React, { useEffect, useState } from "react";
-import { Plus, Trash2, Edit2, X, Save, Shield, ArrowRight } from "lucide-react";
+import { Plus, Trash2, Edit2, X, Save, Shield, ArrowRight, Package } from "lucide-react";
 import { motion } from "framer-motion";
 
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:5000/api";
+
+function parseList(value) {
+  if (Array.isArray(value)) return value;
+  if (typeof value !== 'string') return [];
+  try {
+    const parsed = JSON.parse(value);
+    return Array.isArray(parsed) ? parsed : [];
+  } catch {
+    return [];
+  }
+}
 
 export function AdminOffersPage() {
   const [offers, setOffers] = useState([]);
@@ -281,7 +292,12 @@ export function AdminOffersPage() {
                     />
                   </div>
                   <div className="max-h-[300px] overflow-y-auto border border-gray-100 rounded-lg p-2 space-y-1">
-                    {filteredProducts.map(p => (
+                    {filteredProducts.map(p => {
+                      const variants = parseList(p.variants);
+                      const images = parseList(p.images);
+                      const firstImg = images?.[0] || variants?.[0]?.images?.[0] || p.image_url;
+
+                      return (
                       <label key={p.id} className="flex items-center gap-3 p-2 hover:bg-gray-50 rounded-lg cursor-pointer">
                         <input 
                           type="checkbox" 
@@ -290,14 +306,20 @@ export function AdminOffersPage() {
                           className="w-4 h-4 text-gray-900"
                         />
                         <div className="flex items-center gap-2">
-                          <img src={p.image_url} alt="" className="w-8 h-8 rounded object-cover" />
+                          <div className="w-8 h-8 rounded bg-gray-100 overflow-hidden shrink-0 border border-brand-blue/10 flex items-center justify-center">
+                            {firstImg ? (
+                              <img src={firstImg} alt="" className="w-full h-full object-cover" />
+                            ) : (
+                              <Package className="w-4 h-4 text-gray-400" />
+                            )}
+                          </div>
                           <span className="text-sm font-semibold">{p.name}</span>
                         </div>
                         {p.offer_id && (
                           <span className="ml-auto text-[10px] bg-gray-100 px-2 py-1 rounded-full text-gray-500">Has Offer</span>
                         )}
                       </label>
-                    ))}
+                    )})}
                     {filteredProducts.length === 0 && <p className="text-center text-gray-500 text-sm py-4">No products found</p>}
                   </div>
                   <div className="text-xs text-gray-500 text-right">

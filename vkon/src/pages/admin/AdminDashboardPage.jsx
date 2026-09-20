@@ -82,7 +82,7 @@ export function AdminDashboardPage() {
                 <tbody className="divide-y divide-[#08183A]/5">
                   {orders.slice(0, 8).map((order) => (
                     <tr key={order.id} className="hover:bg-[#FDF8F0]/30 transition-colors">
-                      <td className="py-3 pr-2 sm:pr-4 font-semibold text-gray-900 text-xs sm:text-sm">MSM - {order.id}</td>
+                      <td className="py-3 pr-2 sm:pr-4 font-semibold text-gray-900 text-xs sm:text-sm"> {order.id}</td>
                       <td className="py-3 pr-2 sm:pr-4 text-gray-900/70 text-xs sm:text-sm truncate max-w-[100px] sm:max-w-none">{order.address?.name || "—"}</td>
                       <td className="py-3 pr-2 sm:pr-4 font-serif font-bold text-brand-orange text-xs sm:text-sm">₹{order.total}</td>
                       <td className="py-3 pr-2 sm:pr-4">
