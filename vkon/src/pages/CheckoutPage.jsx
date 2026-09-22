@@ -21,6 +21,16 @@ function flag(code) {
   return code.toUpperCase().replace(/./g, c => String.fromCodePoint(127397 + c.charCodeAt(0)));
 }
 
+const getImgSrc = (item) => {
+  if (item.variant?.image) return item.variant.image;
+  let parsedImages = [];
+  try {
+    parsedImages = typeof item.product.images === 'string' ? JSON.parse(item.product.images) : item.product.images;
+  } catch(e) {}
+  if (Array.isArray(parsedImages) && parsedImages.length > 0) return parsedImages[0];
+  return item.product.image_url || '';
+};
+
 function AddressAutocomplete({ value, onChange, onSelect }) {
   const [inputVal, setInputVal] = useState(value || '');
   const [suggestions, setSuggestions] = useState([]);
@@ -610,9 +620,15 @@ export function CheckoutPage() {
     if (token && saveAddress && orderType !== 'pickup') {
       addAddress({ ...address, mobile: `${dialCode}${address.mobile}`, is_default: saveAsDefault }).catch(() => {});
     }
-    // Start 5-minute session timer
-    setSessionSecondsLeft(SESSION_MINUTES * 60);
-    setStep(3);
+    
+    if (orderType === 'pickup') {
+      setSessionSecondsLeft(SESSION_MINUTES * 60);
+      setStep(3);
+      return;
+    }
+
+    // Call place order directly
+    await handlePlaceOrder();
   };
 
   // Session countdown effect
@@ -630,9 +646,6 @@ export function CheckoutPage() {
   }, [sessionSecondsLeft]);
 
   const handlePlaceOrder = async () => {
-    if (orderType !== 'pickup' && !termsAccepted) { showToast('Please accept the Terms & Conditions to proceed.', 'error'); return; }
-    if (orderType !== 'pickup' && !addressConfirmed) { showToast('Please confirm your shipping address is correct.', 'error'); return; }
-    if (orderType === 'pickup' && !pickupTermsAccepted) { showToast('Please accept the Pickup Terms & Conditions to proceed.', 'error'); return; }
     setIsPlacingOrder(true);
     setPaymentError(null);
     try {
@@ -649,83 +662,20 @@ export function CheckoutPage() {
         return;
       }
 
-
-
-      // Razorpay Checkout Flow
-      const intentRes = await fetch(`${BACKEND_URL}/general/razorpay/create-order`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ amount: finalTotal })
-      });
-      const intentData = await intentRes.json();
-      if (!intentData.success) { showToast('Failed to initialize payment', 'error'); setIsPlacingOrder(false); return; }
-
-      const options = {
-        key: import.meta.env.VITE_RAZORPAY_KEY_ID || 'rzp_test_dummy',
-        amount: intentData.amount,
-        currency: "INR",
-        name: "VConnect",
-        description: "Order Payment",
-        order_id: intentData.orderId,
-        handler: async function (response) {
-          try {
-            const verifyRes = await fetch(`${BACKEND_URL}/general/razorpay/verify`, {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({
-                razorpay_order_id: response.razorpay_order_id,
-                razorpay_payment_id: response.razorpay_payment_id,
-                razorpay_signature: response.razorpay_signature
-              })
-            });
-            const verifyData = await verifyRes.json();
-            
-            if (verifyData.success) {
-              setTransactionId(response.razorpay_payment_id);
-              const createOrderData = await createOrder('razorpay', response.razorpay_order_id, response.razorpay_payment_id, response.razorpay_signature);
-              if (createOrderData.success) {
-                setIsPlacingOrder(false);
-                setOrderSuccess(true);
-                setTimeout(() => {
-                  clearCart();
-                  navigate(`/order-tracking/${createOrderData.order.order_number}`);
-                }, 3000);
-              } else {
-                showToast('Failed to place order after payment.', 'error');
-                setPaymentError('Your payment was processed but we could not create your order. Please contact support with your payment reference.');
-                setIsPlacingOrder(false);
-              }
-            } else {
-              setPaymentError('Payment verification failed.');
-              setIsPlacingOrder(false);
-            }
-          } catch (err) {
-            setPaymentError('Payment verification error.');
-            setIsPlacingOrder(false);
-          }
-        },
-        prefill: {
-          name: orderType === 'pickup' ? pickupContact.name : address.name,
-          email: orderType === 'pickup' ? pickupContact.email : "",
-          contact: orderType === 'pickup' ? pickupContact.phone : address.mobile
-        },
-        theme: {
-          color: "#E53935"
-        },
-        modal: {
-          ondismiss: function() {
-            setIsPlacingOrder(false);
-            setPaymentError('Payment was cancelled.');
-          }
-        }
-      };
-
-      const rzp = new window.Razorpay(options);
-      rzp.on('payment.failed', function (response){
-        setPaymentError(response.error.description);
+      // Direct Order Placement Flow
+      const createOrderData = await createOrder('cod');
+      if (createOrderData.success) {
         setIsPlacingOrder(false);
-      });
-      rzp.open();
+        setOrderSuccess(true);
+        setTimeout(() => {
+          clearCart();
+          navigate(`/order-tracking/${createOrderData.order.order_number}`);
+        }, 3000);
+      } else {
+        showToast('Failed to place order.', 'error');
+        setPaymentError('We could not create your order. Please try again.');
+        setIsPlacingOrder(false);
+      }
     } catch (err) {
       console.error(err);
       setIsPlacingOrder(false);
@@ -809,7 +759,7 @@ export function CheckoutPage() {
                 {items.map(item => (
                   <div key={`${item.product.id}-${item.variant?.size}`} className="flex gap-3">
                     <div className="w-14 h-14 bg-white rounded-xl border border-brand-blue/10 p-1 shrink-0">
-                      <img src={item.product.images?.[0] || item.product.image_url} alt="" className="w-full h-full object-contain" />
+                      <img src={getImgSrc(item)} alt="" className="w-full h-full object-contain" />
                     </div>
                     <div className="flex-1 min-w-0">
                       <p className="text-sm font-bold text-gray-900 line-clamp-1">{item.product.name}</p>
@@ -888,7 +838,7 @@ export function CheckoutPage() {
             <div className="space-y-3">
               <button onClick={handleProceedToPayment}
                 className="w-full bg-brand-blue text-white font-bold text-sm rounded-xl py-4 shadow-lg hover:shadow-xl hover:bg-brand-blue/90 transition-all flex items-center justify-center gap-2">
-                <CreditCard className="w-4 h-4" /> Proceed to Payment
+                <CheckCircle className="w-4 h-4" /> Place Order
               </button>
               <div className="flex items-center justify-center gap-1.5">
                 <ShieldCheck className="w-3.5 h-3.5 text-gray-400" />
@@ -1079,7 +1029,7 @@ export function CheckoutPage() {
                 {items.map(item => (
                   <div key={`${item.product.id}-${item.variant?.size}`} className="flex gap-4">
                     <div className="w-16 h-16 bg-white rounded-xl border border-brand-blue/10 p-1 shrink-0">
-                      <img src={item.product.images?.[0] || item.product.image_url} alt="" className="w-full h-full object-contain" />
+                      <img src={getImgSrc(item)} alt="" className="w-full h-full object-contain" />
                     </div>
                     <div>
                       <h4 className="text-sm font-bold text-gray-900 line-clamp-1">{item.product.name}</h4>
@@ -1135,7 +1085,7 @@ export function CheckoutPage() {
                   disabled={step === 2 && pickupEnabled}
                   className={`w-full bg-brand-blue text-white font-bold text-base rounded-xl py-4 shadow-lg shadow-brand-blue/30 hover:shadow-xl hover:bg-brand-blue/90 hover:-translate-y-0.5 transition-all flex items-center justify-center gap-2 ${step === 2 && pickupEnabled ? 'opacity-40 cursor-not-allowed' : ''}`}
                 >
-                  Proceed to Payment
+                  Place Order
                 </button>
               ) : null}
               
@@ -1168,7 +1118,7 @@ export function CheckoutPage() {
               disabled={step === 2 && pickupEnabled}
               className={`w-full bg-brand-blue text-white font-bold text-base rounded-xl py-4 shadow-lg shadow-brand-blue/30 hover:shadow-xl hover:bg-brand-blue/90 hover:-translate-y-0.5 transition-all flex items-center justify-center gap-2 ${step === 2 && pickupEnabled ? 'opacity-40 cursor-not-allowed' : ''}`}
             >
-              Proceed to Payment
+              Place Order
             </button>
           ) : null}
         
@@ -1183,7 +1133,7 @@ export function CheckoutPage() {
       {isPlacingOrder && (
         <div className="fixed inset-0 z-[100] bg-white/80 backdrop-blur-sm flex flex-col items-center justify-center">
           <div className="w-14 h-14 border-4 border-brand-blue/10 border-t-brand-gold rounded-full animate-spin mb-4" />
-          <p className="text-sm font-semibold text-gray-900">Processing your payment...</p>
+          <p className="text-sm font-semibold text-gray-900">Processing your Order...</p>
         </div>
       )}
 

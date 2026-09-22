@@ -1250,17 +1250,17 @@ router.post('/settings/vacation', authMiddleware, adminOnly, async (req, res) =>
 });
 
 
-// POST /api/admin/delivery-partners — Create a delivery partner
-router.post('/delivery-partners', authMiddleware, adminOnly, async (req, res) => {
-  const { name, email, phone, password } = req.body;
-  if (!name || !email || !phone || !password) return res.status(400).json({ error: 'All fields are required' });
+// POST /api/admin/delivery-vehicles — Create a delivery vehicle/partner
+router.post('/delivery-vehicles', authMiddleware, adminOnly, async (req, res) => {
+  const { name, email, phone, vehicle_number } = req.body;
+  if (!name || !email || !phone || !vehicle_number) return res.status(400).json({ error: 'All fields are required' });
   try {
     const existing = await pool.query('SELECT id FROM users WHERE email=$1 OR phone=$2', [email, phone]);
     if (existing.rows.length) return res.status(409).json({ error: 'Email or phone already registered' });
-    const hash = await require('bcryptjs').hash(password, 10);
+    const hash = await require('bcryptjs').hash(phone, 10); // default password is phone number
     const result = await pool.query(
-      'INSERT INTO users (name, email, phone, password_hash, role, is_verified, phone_verified, email_verified) VALUES ($1,$2,$3,$4,$5,TRUE,TRUE,TRUE) RETURNING id',
-      [name, email, phone, hash, 'delivery']
+      'INSERT INTO users (name, email, phone, password_hash, role, vehicle_number, is_verified) VALUES ($1,$2,$3,$4,$5,$6,TRUE) RETURNING id',
+      [name, email, phone, hash, 'delivery', vehicle_number]
     );
     res.json({ success: true, partnerId: result.rows[0].id });
   } catch (err) {
@@ -1268,11 +1268,11 @@ router.post('/delivery-partners', authMiddleware, adminOnly, async (req, res) =>
   }
 });
 
-// GET /api/admin/delivery-partners — List delivery partners with stats
-router.get('/delivery-partners', authMiddleware, adminOnly, async (req, res) => {
+// GET /api/admin/delivery-vehicles — List delivery vehicles with stats
+router.get('/delivery-vehicles', authMiddleware, adminOnly, async (req, res) => {
   try {
     const result = await pool.query(`
-      SELECT u.id, u.name, u.email, u.phone, u.created_at,
+      SELECT u.id, u.name, u.email, u.phone, u.vehicle_number, u.created_at,
         COUNT(o.id) FILTER (WHERE o.status = 'delivered') as delivered_count,
         COUNT(o.id) FILTER (WHERE o.status != 'delivered') as pending_count
       FROM users u

@@ -15,6 +15,7 @@ const NAV = [
   { href: "/admin/banners", label: "Banners", icon: <ImageIcon className="w-4 h-4" /> },
   { href: "/admin/coupons", label: "Coupons", icon: <Tag className="w-4 h-4" /> },
   { href: "/admin/reviews", label: "Reviews", icon: <MessageSquare className="w-4 h-4" /> },
+  { href: "/admin/delivery-vehicles", label: "Delivery Vehicles", icon: <Truck className="w-4 h-4" /> },
   { href: "/admin/reports", label: "Reports", icon: <BarChart3 className="w-4 h-4" /> },
   { href: "/admin/vacation", label: "Vacation", icon: <PalmtreeIcon className="w-4 h-4" /> },
   { href: "/admin/settings", label: "Settings", icon: <Settings className="w-4 h-4" /> },

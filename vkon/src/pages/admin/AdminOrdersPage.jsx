@@ -735,7 +735,7 @@ export function AdminOrdersPage() {
       setLoading(false);
       return;
     }
-    fetch(`${BACKEND_URL}/admin/delivery-partners`, { headers: { Authorization: `Bearer ${token}` } })
+    fetch(`${BACKEND_URL}/admin/delivery-vehicles`, { headers: { Authorization: `Bearer ${token}` } })
       .then(r => r.json())
       .then(d => { if (d.partners) setDeliveryPartners(d.partners); })
       .catch(console.error);
@@ -1234,12 +1234,12 @@ const updateStatus = async (orderId, status) => {
                     </span>
                     {order.payment_method === 'cod' && (
                       <span className="text-[9px] sm:text-[10px] font-bold font-sans px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-700">
-                        COD (${order.total - (order.advance_paid || 0)} Pending)
+                        COD (₹{order.total - (order.advance_paid || 0)} Pending)
                       </span>
                     )}
                     {Number(order.refund_amount) > 0 && (
                       <span className="text-[9px] sm:text-[10px] font-bold font-sans px-2 py-0.5 rounded-full bg-red-100 text-red-700 border border-red-200">
-                        Refunded ${Number(order.refund_amount).toFixed(2)}
+                        Refunded ₹{Number(order.refund_amount).toFixed(2)}
                       </span>
                     )}
                   </div>

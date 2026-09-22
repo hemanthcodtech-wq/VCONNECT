@@ -32,6 +32,7 @@ import { AdminLayout } from './components/admin/AdminLayout';
 import { AdminDashboardPage } from './pages/admin/AdminDashboardPage';
 import { AdminOrdersPage } from './pages/admin/AdminOrdersPage';
 import { AdminEmployeesPage } from './pages/admin/AdminEmployeesPage';
+import { AdminDeliveryVehiclesPage } from './pages/admin/AdminDeliveryVehiclesPage';
 import { AdminStoresPage } from './pages/admin/AdminStoresPage';
 import { AdminProductsPage } from './pages/admin/AdminProductsPage';
 import { AdminBannersPage } from './pages/admin/AdminBannersPage';
@@ -78,6 +79,7 @@ function App() {
                   <Route path="/" element={<AdminDashboardPage />} />
                   <Route path="/orders" element={<AdminOrdersPage />} />
                   <Route path="employees" element={<AdminEmployeesPage />} />
+                  <Route path="delivery-vehicles" element={<AdminDeliveryVehiclesPage />} />
                   <Route path="stores" element={<AdminStoresPage />} />
                   <Route path="products" element={<AdminProductsPage />} />
                   <Route path="categories" element={<AdminCategoriesPage />} />
