@@ -9,8 +9,10 @@ const allowedOrigins = [
   'http://localhost:5173',
   'https://vconnecthi.vercel.app',
   'https://vconnect-theta.vercel.app',
-  
-  
+  'https://www.vconnect2u.in',
+  'https://vconnect2u.in',
+
+
   process.env.FRONTEND_URL
 ].filter(Boolean);
 
