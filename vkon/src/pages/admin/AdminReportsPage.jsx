@@ -48,7 +48,7 @@ export function AdminReportsPage() {
               <p className="text-xl font-serif font-bold text-gray-900">${stats?.totalRevenue || 0}</p>
             </div>
           </div>
-          <button onClick={() => downloadReport('revenue')} className="w-full mt-2 flex items-center justify-center gap-2 bg-[#FDF8F0] text-gray-900 py-2 rounded-xl text-sm font-semibold hover:bg-brand-blue text-white/10 transition-colors">
+          <button onClick={() => downloadReport('revenue')} className="w-full mt-2 flex items-center justify-center gap-2 bg-[#FDF8F0] text-gray-900 py-2 rounded-xl text-sm font-semibold hover:bg-brand-blue hover:text-white transition-colors">
             <Download className="w-4 h-4" /> Download Sales Report
           </button>
         </div>
@@ -63,7 +63,7 @@ export function AdminReportsPage() {
               <p className="text-xl font-serif font-bold text-gray-900">{stats?.totalOrders || 0}</p>
             </div>
           </div>
-          <button onClick={() => downloadReport('orders')} className="w-full mt-2 flex items-center justify-center gap-2 bg-[#FDF8F0] text-gray-900 py-2 rounded-xl text-sm font-semibold hover:bg-brand-blue text-white/10 transition-colors">
+          <button onClick={() => downloadReport('orders')} className="w-full mt-2 flex items-center justify-center gap-2 bg-[#FDF8F0] text-gray-900 py-2 rounded-xl text-sm font-semibold hover:bg-brand-blue hover:text-white transition-colors">
             <Download className="w-4 h-4" /> Download Orders Report
           </button>
         </div>
@@ -82,7 +82,7 @@ export function AdminReportsPage() {
                 <p className="font-sans font-bold text-gray-900">{report.title}</p>
                 <p className="text-xs text-gray-900/50">{report.desc}</p>
               </div>
-              <button onClick={() => downloadReport(report.type)} className="flex items-center justify-center gap-2 bg-white border border-brand-blue/20 text-gray-900 px-4 py-2 rounded-lg text-sm font-semibold hover:bg-brand-blue text-white hover:text-white transition-colors">
+              <button onClick={() => downloadReport(report.type)} className="flex items-center justify-center gap-2 bg-white border border-brand-blue/20 text-gray-900 px-4 py-2 rounded-lg text-sm font-semibold hover:bg-brand-blue hover:text-white transition-colors">
                 <Download className="w-4 h-4" /> Export CSV
               </button>
             </div>

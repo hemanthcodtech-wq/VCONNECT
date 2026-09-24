@@ -228,7 +228,7 @@ export function HomePage() {
       {/* Mobile Top Section */}
       <div className="md:hidden bg-brand-beige pt-[100px] pb-12 px-4 relative flex flex-col items-center">
         {banners.length > 0 ? (
-          <div className="relative w-full h-[180px] rounded-[20px] overflow-hidden shadow-xl bg-gradient-to-br from-[#0033a0] to-emerald-900">
+          <div className="relative w-full h-[180px] rounded-[20px] overflow-hidden bg-gradient-to-br from-[#0033a0] to-emerald-900">
             <div
               className="flex h-full transition-transform duration-700 ease-in-out"
               style={{ transform: `translateX(-${currentSlide * 100}%)` }}
@@ -264,7 +264,7 @@ export function HomePage() {
             )}
           </div>
         ) : (
-          <div className="relative w-full h-[180px] rounded-[20px] overflow-hidden shadow-xl bg-gradient-to-br from-[#0033a0] to-emerald-900">
+          <div className="relative w-full h-[180px] rounded-[20px] overflow-hidden bg-gradient-to-br from-[#0033a0] to-emerald-900">
             <div className="absolute inset-0 flex flex-col justify-center px-6 z-10 w-[65%]">
               <h2 className="text-white text-2xl font-serif font-bold leading-tight mb-1.5 drop-shadow-md">
                 Premium Grains &<br />Spices
@@ -289,7 +289,7 @@ export function HomePage() {
         {/* Desktop Banner Section (hidden on mobile) */}
         <div className="hidden md:block animate-section py-8">
           {banners.length > 0 ? (
-          <div className="relative w-full md:w-[75%] h-48 md:h-[400px] rounded-2xl overflow-hidden shadow-lg border border-gray-100 mx-auto px-4 md:px-0">
+          <div className="relative w-full md:w-[75%] h-48 md:h-[400px] rounded-2xl overflow-hidden border border-gray-100 mx-auto px-4 md:px-0">
             <div
               className="flex h-full transition-transform duration-700 ease-in-out"
               style={{ transform: `translateX(-${currentSlide * 100}%)` }}
@@ -324,7 +324,7 @@ export function HomePage() {
           </div>
         ) : (
           <div className="flex justify-center px-4 md:px-24 pt-2 md:pt-6 pb-2">
-            <div className="relative w-full h-72 md:h-[360px] rounded-[24px] overflow-hidden shadow-2xl border border-[#0033a0]/10 bg-brand-beige group">
+            <div className="relative w-full h-72 md:h-[360px] rounded-[24px] overflow-hidden border border-[#0033a0]/10 bg-brand-beige group">
               <div className="absolute inset-0 z-0">
                 <img src="https://images.unsplash.com/photo-1615486171448-472e391cb09c?auto=format&fit=crop&w=1600&q=80" alt="Premium Grains and Spices" className="w-full h-full object-cover object-right transition-transform duration-1000 group-hover:scale-105 opacity-90" />
                 <div className="absolute inset-0 bg-gradient-to-r from-[#FDF8F0] via-[#FDF8F0]/95 to-[#FDF8F0]/0 z-10 pointer-events-none w-full md:w-[80%]"></div>
