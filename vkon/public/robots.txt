@@ -5,4 +5,4 @@ Disallow: /profile/
 Disallow: /checkout/
 Disallow: /cart/
 
-Sitemap: https://www.vconnect.in/sitemap.xml
+Sitemap: https://www.vconnect2u.in/sitemap.xml
