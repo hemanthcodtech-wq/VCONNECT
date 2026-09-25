@@ -460,7 +460,7 @@ export function CheckoutPage() {
   const [taxAmount, setTaxAmount] = useState(0);
   const [taxLabel, setTaxLabel] = useState('Tax (enter pincode)');
   const [useCoins, setUseCoins] = useState(false);
-  const coinsDiscount = useCoins ? Math.min(parseFloat(user?.m_coins) || 0, subtotal - discount + shippingFee + taxAmount) : 0;
+  const coinsDiscount = 0;
   const finalTotal = subtotal - discount + shippingFee + taxAmount - coinsDiscount;
 
   useEffect(() => {
@@ -558,7 +558,7 @@ export function CheckoutPage() {
     const res = await fetch(endpoint, {
       method: 'POST',
       headers,
-      body: JSON.stringify({ items, address: (orderType === 'pickup') ? { name: pickupContact.name, mobile: `${COUNTRIES.find(c=>c.code===pickupDialCode)?.dial||'+1'}${pickupContact.phone}`, email: pickupContact.email } : address, total: finalTotal, coupon_code: couponCode, payment_method: pMethod, order_type: orderType, razorpay_order_id: razorpayOrderId, razorpay_payment_id: razorpayPaymentId, razorpay_signature: razorpaySignature, discount_amount: discount, shipping_fee: shippingFee, tax_amount: taxAmount, m_coins_used: coinsDiscount, store_id: selectedStore?.id })
+      body: JSON.stringify({ items, address: (orderType === 'pickup') ? { name: pickupContact.name, mobile: `${COUNTRIES.find(c=>c.code===pickupDialCode)?.dial||'+1'}${pickupContact.phone}`, email: pickupContact.email } : address, total: finalTotal, coupon_code: couponCode, payment_method: pMethod, order_type: orderType, razorpay_order_id: razorpayOrderId, razorpay_payment_id: razorpayPaymentId, razorpay_signature: razorpaySignature, discount_amount: discount, shipping_fee: shippingFee, tax_amount: taxAmount, store_id: selectedStore?.id })
     });
     return res.json();
   };
@@ -566,18 +566,20 @@ export function CheckoutPage() {
   const handleProceedToPayment = async () => {
     if (orderType !== 'pickup') {
       const errs = {};
-      if (!address.name.trim()) errs.name = 'Full name is required';
-      if (!address.line1.trim()) errs.line1 = 'Address is required';
-      if (!address.city.trim()) errs.city = 'City is required';
-      if (!address.pincode.trim()) errs.pincode = 'ZIP code is required';
-      if (!address.country.trim()) errs.country = 'Country is required';
-      const mobileDigits = address.mobile.replace(/\D/g, '');
-      if (!address.mobile.trim()) {
-        errs.mobile = 'Phone number is required';
-      } else if (['US', 'CA', 'IN'].includes(dialCountryCode) && mobileDigits.length !== 10) {
-        errs.mobile = `Enter a valid 10-digit number`;
-      } else if (!['US', 'CA', 'IN'].includes(dialCountryCode) && (mobileDigits.length < 5 || mobileDigits.length > 15)) {
-        errs.mobile = 'Enter a valid phone number';
+      if (!selectedStore) {
+        if (!address.name.trim()) errs.name = 'Full name is required';
+        if (!address.line1.trim()) errs.line1 = 'Address is required';
+        if (!address.city.trim()) errs.city = 'City is required';
+        if (!address.pincode.trim()) errs.pincode = 'ZIP code is required';
+        if (!address.country.trim()) errs.country = 'Country is required';
+        const mobileDigits = address.mobile.replace(/\D/g, '');
+        if (!address.mobile.trim()) {
+          errs.mobile = 'Phone number is required';
+        } else if (['US', 'CA', 'IN'].includes(dialCountryCode) && mobileDigits.length !== 10) {
+          errs.mobile = `Enter a valid 10-digit number`;
+        } else if (!['US', 'CA', 'IN'].includes(dialCountryCode) && (mobileDigits.length < 5 || mobileDigits.length > 15)) {
+          errs.mobile = 'Enter a valid phone number';
+        }
       }
       if (Object.keys(errs).length > 0) {
         setFieldErrors(errs);
@@ -787,15 +789,7 @@ export function CheckoutPage() {
                     <span>{taxLabel || 'Tax'}</span><span className="font-medium">₹{taxAmount.toFixed(2)}</span>
                   </div>
                 )}
-                {user?.m_coins > 0 && (
-                  <div className="flex justify-between items-center text-sm pt-2 mt-1 border-t border-brand-blue/5">
-                    <label className="flex items-center gap-2 cursor-pointer text-amber-700 font-medium">
-                      <input type="checkbox" checked={useCoins} onChange={e => setUseCoins(e.target.checked)} className="accent-amber-600 w-4 h-4" />
-                      Use M-Coins (Bal: {user.m_coins})
-                    </label>
-                    {useCoins && <span className="font-medium text-amber-600">- ₹{coinsDiscount.toFixed(2)}</span>}
-                  </div>
-                )}
+
                 <div className="flex justify-between font-bold text-gray-900 text-base pt-2 border-t border-brand-blue/10">
                   <span>Grand Total</span><span className="text-brand-blue">₹{finalTotal.toFixed(2)}</span>
                 </div>
@@ -834,17 +828,7 @@ export function CheckoutPage() {
               </div>
             </div>
 
-            {/* Proceed button */}
-            <div className="space-y-3">
-              <button onClick={handleProceedToPayment}
-                className="w-full bg-brand-blue text-white font-bold text-sm rounded-xl py-4 shadow-lg hover:shadow-xl hover:bg-brand-blue/90 transition-all flex items-center justify-center gap-2">
-                <CheckCircle className="w-4 h-4" /> Place Order
-              </button>
-              <div className="flex items-center justify-center gap-1.5">
-                <ShieldCheck className="w-3.5 h-3.5 text-gray-400" />
-                <span className="text-[11px] text-gray-400">100% Secure Transaction</span>
-              </div>
-            </div>
+
           </div>
         )}
         {step === 3 && orderType === 'pickup' && (
@@ -1064,15 +1048,7 @@ export function CheckoutPage() {
                     <span className="font-medium text-gray-900">₹{taxAmount.toFixed(2)}</span>
                   </div>
                 )}
-                {user?.m_coins > 0 && (
-                  <div className="flex justify-between items-center text-sm mb-3 pb-2 border-b border-brand-blue/5">
-                    <label className="flex items-center gap-2 cursor-pointer text-amber-700 font-medium hover:text-amber-800 transition-colors">
-                      <input type="checkbox" checked={useCoins} onChange={e => setUseCoins(e.target.checked)} className="accent-amber-600 w-4 h-4 rounded" />
-                      Use M-Coins (Balance: {user.m_coins})
-                    </label>
-                    {useCoins && <span className="font-medium text-amber-600">- ₹{coinsDiscount.toFixed(2)}</span>}
-                  </div>
-                )}
+
                 <div className="flex justify-between font-bold text-gray-900 text-xl pt-2 border-t border-brand-blue/10">
                   <span>Grand Total</span>
                   <span className="text-brand-blue">₹{finalTotal.toFixed(2)}</span>

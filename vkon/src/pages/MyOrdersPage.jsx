@@ -37,10 +37,15 @@ export function MyOrdersPage() {
   const addToCart = useCartStore(state => state.addToCart);
   const [activeFilter, setActiveFilter] = useState('all');
   const [expandedOrder, setExpandedOrder] = useState(null);
+  const [products, setProducts] = useState([]);
 
   useEffect(() => {
     if (!token) { navigate('/login'); return; }
     fetchProfile();
+    fetch(`${import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000/api'}/general/products`)
+      .then(res => res.json())
+      .then(data => { if (data.products) setProducts(data.products); })
+      .catch(console.error);
   }, [token]);
 
   const escapeHtml = (value) =>
@@ -72,6 +77,14 @@ export function MyOrdersPage() {
       const img = item.variant?.image || matchedVariant?.images?.[0] || item.product?.images?.[0] || item.product?.image_url || item.image_url || '';
       const absImg = img && img.startsWith('http') ? img : (img ? `${window.location.origin}${img.startsWith('/') ? '' : '/'}${img}` : '');
       const code = item.variant?.sku || item.variant?.code || matchedVariant?.code || item.product?.product_code || item.product_code || item.sku || '';
+      const unitPrice = Number(item.variant?.price || item.product?.price || item.price || 0);
+      const rowTotal = unitPrice * item.qty;
+      const liveProd = products.find(p => p.id === (item.product?.id || item.product_id || item.id));
+      const cgstPerc = parseFloat(item.product?.cgst ?? liveProd?.cgst ?? 0);
+      const sgstPerc = parseFloat(item.product?.sgst ?? liveProd?.sgst ?? 0);
+      const cgstAmt = (rowTotal * cgstPerc) / 100;
+      const sgstAmt = (rowTotal * sgstPerc) / 100;
+
       return `
       <tr style="background:${idx % 2 === 0 ? '#ffffff' : '#FFFAF9'}">
         <td style="padding:10px 12px;border-bottom:1px solid #F6EFEF;vertical-align:middle;text-align:center;font-size:9pt;color:#888;">${idx + 1}</td>
@@ -86,8 +99,10 @@ export function MyOrdersPage() {
         </td>
         <td style="padding:10px 12px;border-bottom:1px solid #F6EFEF;vertical-align:middle;text-align:center;font-size:9pt;">${escapeHtml(item.variant?.size || item.size || '—')}</td>
         <td style="padding:10px 12px;border-bottom:1px solid #F6EFEF;vertical-align:middle;text-align:center;font-size:9pt;">${item.qty}</td>
-        <td style="padding:10px 12px;border-bottom:1px solid #F6EFEF;vertical-align:middle;text-align:right;font-size:9pt;font-weight:600;">₹${Number(item.variant?.price || item.product?.price || item.price || 0).toFixed(2)}</td>
-        <td style="padding:10px 12px;border-bottom:1px solid #F6EFEF;vertical-align:middle;text-align:right;font-size:9pt;font-weight:700;color:#08183A;">₹${(Number(item.variant?.price || item.product?.price || item.price || 0) * item.qty).toFixed(2)}</td>
+        <td style="padding:10px 12px;border-bottom:1px solid #F6EFEF;vertical-align:middle;text-align:right;font-size:9pt;font-weight:600;">₹${unitPrice.toFixed(2)}</td>
+        <td style="padding:10px 12px;border-bottom:1px solid #F6EFEF;vertical-align:middle;text-align:right;font-size:9pt;font-weight:600;">₹${cgstAmt.toFixed(2)}</td>
+        <td style="padding:10px 12px;border-bottom:1px solid #F6EFEF;vertical-align:middle;text-align:right;font-size:9pt;font-weight:600;">₹${sgstAmt.toFixed(2)}</td>
+        <td style="padding:10px 12px;border-bottom:1px solid #F6EFEF;vertical-align:middle;text-align:right;font-size:9pt;font-weight:700;color:#08183A;">₹${rowTotal.toFixed(2)}</td>
       </tr>`;
     }).join('');
 
@@ -98,7 +113,7 @@ export function MyOrdersPage() {
 <h2>Invoice - ${order.order_number || order.id}</h2>
 <p>Date: ${orderDate}</p>
 <table style="width:100%;border-collapse:collapse;">
-  <thead><tr style="background:#08183A;"><th style="padding:10px;color:#D4AF37;">#</th><th style="padding:10px;color:#D4AF37;text-align:left;">Item</th><th style="padding:10px;color:#D4AF37;">Size</th><th style="padding:10px;color:#D4AF37;">Qty</th><th style="padding:10px;color:#D4AF37;text-align:right;">Unit</th><th style="padding:10px;color:#D4AF37;text-align:right;">Total</th></tr></thead>
+  <thead><tr style="background:#08183A;"><th style="padding:10px;color:#D4AF37;">#</th><th style="padding:10px;color:#D4AF37;text-align:left;">Item</th><th style="padding:10px;color:#D4AF37;">Size</th><th style="padding:10px;color:#D4AF37;">Qty</th><th style="padding:10px;color:#D4AF37;text-align:right;">Unit</th><th style="padding:10px;color:#D4AF37;text-align:right;">CGST</th><th style="padding:10px;color:#D4AF37;text-align:right;">SGST</th><th style="padding:10px;color:#D4AF37;text-align:right;">Total</th></tr></thead>
   <tbody>${rows}</tbody>
 </table>
 <table style="width:100%;margin-top:16px;border-collapse:collapse;">
@@ -115,9 +130,15 @@ export function MyOrdersPage() {
   const openInvoice = (order) => {
     const invoiceWindow = window.open('', '_blank');
     if (invoiceWindow) {
-      invoiceWindow.document.open();
-      invoiceWindow.document.write(invoiceHtml(order));
-      invoiceWindow.document.close();
+      try {
+        const html = invoiceHtml(order);
+        invoiceWindow.document.open();
+        invoiceWindow.document.write(html);
+        invoiceWindow.document.close();
+      } catch (e) {
+        invoiceWindow.document.write(`<html><body><h2>Error generating invoice</h2><pre>${e.stack || e.message || String(e)}</pre></body></html>`);
+        console.error("Invoice Error:", e);
+      }
     }
   };
 

@@ -338,21 +338,10 @@ router.post('/orders', authMiddleware, async (req, res) => {
     const oType = (order_type === 'pickup' || order_type === 'direct') ? order_type : 'shipping';
 
     const result = await pool.query(
-      `INSERT INTO orders (user_id, employee_id, store_id, order_number, total, items, address, status, payment_method, advance_paid, order_type, razorpay_order_id, razorpay_payment_id, razorpay_signature, discount_amount, coupon_code, shipping_fee, tax_amount, m_coins_used)
-       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19) RETURNING *`,
-      [req.user.id, req.user.id, store_id || null, orderNumber, total, itemsJson, addressJson, 'pending', pMethod, advancePaid, oType, razorpay_order_id || null, razorpay_payment_id || null, razorpay_signature || null, discount_amount || 0, coupon_code || null, shipping_fee || 0, tax_amount || 0, parseFloat(m_coins_used) || 0]
+      `INSERT INTO orders (user_id, employee_id, store_id, order_number, total, items, address, status, payment_method, advance_paid, order_type, razorpay_order_id, razorpay_payment_id, razorpay_signature, discount_amount, coupon_code, shipping_fee, tax_amount)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18) RETURNING *`,
+      [req.user.id, req.user.id, store_id || null, orderNumber, total, itemsJson, addressJson, 'pending', pMethod, advancePaid, oType, razorpay_order_id || null, razorpay_payment_id || null, razorpay_signature || null, discount_amount || 0, coupon_code || null, shipping_fee || 0, tax_amount || 0]
     );
-
-    // M Coins Logic
-    let mCoinsEarned = 0;
-    const orderTotal = parseFloat(total);
-    if (orderTotal > 1999) mCoinsEarned = 30;
-    else if (orderTotal > 999) mCoinsEarned = 15;
-    
-    if (mCoinsEarned > 0 || (parseFloat(m_coins_used) || 0) > 0) {
-      const coinsUsed = parseFloat(m_coins_used) || 0;
-      await pool.query('UPDATE users SET m_coins = GREATEST(m_coins + $1 - $2, 0) WHERE id = $3', [mCoinsEarned, coinsUsed, req.user.id]);
-    }
 
     // Reduce stock
     for (const item of items) {

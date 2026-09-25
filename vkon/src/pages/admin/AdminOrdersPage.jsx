@@ -728,6 +728,7 @@ export function AdminOrdersPage() {
   const [refundResult, setRefundResult] = useState(null); // { success, refundId, amount }
   const [ratesModal, setRatesModal] = useState(null); // { orderId, rates }
   const [editModal, setEditModal] = useState(null); // order object
+  const [adminProducts, setAdminProducts] = useState([]);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -738,6 +739,11 @@ export function AdminOrdersPage() {
     fetch(`${BACKEND_URL}/admin/delivery-vehicles`, { headers: { Authorization: `Bearer ${token}` } })
       .then(r => r.json())
       .then(d => { if (d.partners) setDeliveryPartners(d.partners); })
+      .catch(console.error);
+
+    fetch(`${BACKEND_URL}/admin/products`, { headers: { Authorization: `Bearer ${token}` } })
+      .then(r => r.json())
+      .then(d => { if (d.products) setAdminProducts(d.products); })
       .catch(console.error);
 
     fetch(`${BACKEND_URL}/admin/orders`, { headers: { Authorization: `Bearer ${token}` } })
@@ -884,6 +890,13 @@ const updateStatus = async (orderId, status) => {
       const qty = item.qty;
       const total = price * qty;
       const cancelStyle = isCancelled ? 'text-decoration: line-through; opacity: 0.7;' : '';
+      
+      const liveProd = adminProducts.find(p => p.id === (item.product?.id || item.product_id || item.id));
+      const cgstPerc = parseFloat(item.product?.cgst ?? liveProd?.cgst ?? 0);
+      const sgstPerc = parseFloat(item.product?.sgst ?? liveProd?.sgst ?? 0);
+      const cgstAmt = (total * cgstPerc) / 100;
+      const sgstAmt = (total * sgstPerc) / 100;
+
       return `
       <tr style="${cancelStyle}">
         <td style="padding:4px 2px;border-bottom:1px dashed #333;font-size:10px;text-align:left;word-break:break-word;">
@@ -892,6 +905,8 @@ const updateStatus = async (orderId, status) => {
         </td>
         <td style="padding:4px 2px;border-bottom:1px dashed #333;font-size:10px;text-align:center;vertical-align:top;">${qty}</td>
         <td style="padding:4px 2px;border-bottom:1px dashed #333;font-size:10px;text-align:right;vertical-align:top;">${price.toFixed(2)}</td>
+        <td style="padding:4px 2px;border-bottom:1px dashed #333;font-size:10px;text-align:right;vertical-align:top;">${cgstAmt.toFixed(2)}</td>
+        <td style="padding:4px 2px;border-bottom:1px dashed #333;font-size:10px;text-align:right;vertical-align:top;">${sgstAmt.toFixed(2)}</td>
         <td style="padding:4px 2px;border-bottom:1px dashed #333;font-size:10px;text-align:right;vertical-align:top;">${total.toFixed(2)}</td>
       </tr>`;
     };
@@ -975,10 +990,12 @@ const updateStatus = async (orderId, status) => {
   <table style="border-bottom: 1px solid #000; border-top: 1px solid #000; margin: 5px 0;">
     <thead>
       <tr>
-        <th class="text-left" style="width:50%; border-bottom: 1px solid #000;">Item Name</th>
-        <th class="text-center" style="width:15%; border-bottom: 1px solid #000;">Qty</th>
+        <th class="text-left" style="width:30%; border-bottom: 1px solid #000;">Item Name</th>
+        <th class="text-center" style="width:10%; border-bottom: 1px solid #000;">Qty</th>
         <th class="text-right" style="width:15%; border-bottom: 1px solid #000;">Price</th>
-        <th class="text-right" style="width:20%; border-bottom: 1px solid #000;">Total</th>
+        <th class="text-right" style="width:15%; border-bottom: 1px solid #000;">CGST</th>
+        <th class="text-right" style="width:15%; border-bottom: 1px solid #000;">SGST</th>
+        <th class="text-right" style="width:15%; border-bottom: 1px solid #000;">Total</th>
       </tr>
     </thead>
     <tbody>${rows}</tbody>
@@ -994,11 +1011,7 @@ const updateStatus = async (orderId, status) => {
       <td class="text-left">Discount:</td>
       <td class="text-right">-₹${discountAmt.toFixed(2)}</td>
     </tr>` : ''}
-    ${parseFloat(order.m_coins_used || 0) > 0 ? `
-    <tr>
-      <td class="text-left">M-Coins Used:</td>
-      <td class="text-right">-₹${parseFloat(order.m_coins_used).toFixed(2)}</td>
-    </tr>` : ''}
+
     ${shippingCost > 0 ? `
     <tr>
       <td class="text-left">Shipping:</td>
@@ -1014,52 +1027,6 @@ const updateStatus = async (orderId, status) => {
   </table>
   <div class="divider"></div>
 
-  <div style="margin-top: 10px; margin-bottom: 5px;">
-    <div class="bold" style="font-size:11px;">Tax Summary :</div>
-    <table style="border-collapse: collapse; margin-top: 4px; font-size: 9px; width: 100%; border: 1px solid #000;">
-      <thead>
-        <tr>
-          <th style="border:1px solid #000; padding:2px; text-align:center;">TAXABLE</th>
-          <th style="border:1px solid #000; padding:2px; text-align:center;">Tax<br>Rate</th>
-          <th style="border:1px solid #000; padding:2px; text-align:center;">CGST</th>
-          <th style="border:1px solid #000; padding:2px; text-align:center;">SGST</th>
-          <th style="border:1px solid #000; padding:2px; text-align:center;">IGST</th>
-          <th style="border:1px solid #000; padding:2px; text-align:center;">CESS</th>
-          <th style="border:1px solid #000; padding:2px; text-align:center;">NET</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td style="border:1px solid #000; padding:2px; text-align:center;">${calcTaxable.toFixed(2)}</td>
-          <td style="border:1px solid #000; padding:2px; text-align:center;">5</td>
-          <td style="border:1px solid #000; padding:2px; text-align:center;">${calcHalfGst.toFixed(2)}</td>
-          <td style="border:1px solid #000; padding:2px; text-align:center;">${calcHalfGst.toFixed(2)}</td>
-          <td style="border:1px solid #000; padding:2px; text-align:center;">0.00</td>
-          <td style="border:1px solid #000; padding:2px; text-align:center;">0</td>
-          <td style="border:1px solid #000; padding:2px; text-align:center;">${baseTotal.toFixed(2)}</td>
-        </tr>
-        <tr>
-          <td style="border:1px solid #000; padding:2px; text-align:center;">0.00</td>
-          <td style="border:1px solid #000; padding:2px; text-align:center;">18</td>
-          <td style="border:1px solid #000; padding:2px; text-align:center;">0.00</td>
-          <td style="border:1px solid #000; padding:2px; text-align:center;">0.00</td>
-          <td style="border:1px solid #000; padding:2px; text-align:center;">0.00</td>
-          <td style="border:1px solid #000; padding:2px; text-align:center;">0</td>
-          <td style="border:1px solid #000; padding:2px; text-align:center;">0.00</td>
-        </tr>
-        <tr>
-          <td style="border:1px solid #000; padding:2px; text-align:center;" class="bold">TOTAL</td>
-          <td style="border:1px solid #000; padding:2px; text-align:center;">-</td>
-          <td style="border:1px solid #000; padding:2px; text-align:center;">${calcHalfGst.toFixed(2)}</td>
-          <td style="border:1px solid #000; padding:2px; text-align:center;">${calcHalfGst.toFixed(2)}</td>
-          <td style="border:1px solid #000; padding:2px; text-align:center;">0.00</td>
-          <td style="border:1px solid #000; padding:2px; text-align:center;">0</td>
-          <td style="border:1px solid #000; padding:2px; text-align:center;">${baseTotal.toFixed(2)}</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-  <div class="divider"></div>
   
   <div class="text-center" style="margin-top:10px; font-size:10px; line-height: 1.4;">
     <div>For any Suggestion and Complaint reach us on: 8886000847</div>
@@ -1076,9 +1043,15 @@ const updateStatus = async (orderId, status) => {
   const openInvoice = (order) => {
     const invoiceWindow = window.open("", "_blank");
     if (invoiceWindow) {
-      invoiceWindow.document.open();
-      invoiceWindow.document.write(invoiceHtml(order));
-      invoiceWindow.document.close();
+      try {
+        const html = invoiceHtml(order);
+        invoiceWindow.document.open();
+        invoiceWindow.document.write(html);
+        invoiceWindow.document.close();
+      } catch (e) {
+        invoiceWindow.document.write(`<html><body><h2>Error generating invoice</h2><pre>${e.stack || e.message || String(e)}</pre></body></html>`);
+        console.error("Invoice Error:", e);
+      }
     }
   };
 

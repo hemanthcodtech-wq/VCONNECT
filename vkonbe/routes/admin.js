@@ -739,8 +739,8 @@ router.post('/products', authMiddleware, adminOnly, async (req, res) => {
       }
     const result = await pool.query(
       `INSERT INTO products 
-       (name, description, stock, sizes, image_url, images, color, category, model, is_active, is_bestseller, is_trending, is_offer, is_festive, variants, reviews, details, allow_reviews, instagram_reel_url) 
-       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19) RETURNING *`,
+       (name, description, stock, sizes, image_url, images, color, category, model, is_active, is_bestseller, is_trending, is_offer, is_festive, variants, reviews, details, allow_reviews, instagram_reel_url, cgst, sgst) 
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21) RETURNING *`,
       [
         name, description, stock, JSON.stringify(sizes || []), image_url, 
         JSON.stringify(images || []), color, category, model, 
@@ -753,7 +753,9 @@ router.post('/products', authMiddleware, adminOnly, async (req, res) => {
         JSON.stringify(reviews || []),
         JSON.stringify(details || []),
         allow_reviews ?? true,
-        instagram_reel_url || null
+        instagram_reel_url || null,
+        parseFloat(req.body.cgst) || 0,
+        parseFloat(req.body.sgst) || 0
       ]
     );
     res.json({ product: result.rows[0] });
@@ -820,8 +822,8 @@ router.put('/products/:id', authMiddleware, adminOnly, async (req, res) => {
     const reviewsJson = Array.isArray(reviews) ? JSON.stringify(reviews) : '[]';
     const detailsJson = Array.isArray(details) ? JSON.stringify(details) : '[]';
     const result = await pool.query(
-      'UPDATE products SET name=$1, description=$2, sizes=$3, stock=$4, image_url=$5, images=$6, color=$7, category=$8, model=$9, is_active=$10, is_bestseller=$11, is_trending=$12, is_offer=$13, is_festive=$14, variants=$15, reviews=$16, details=$17, allow_reviews=$18, instagram_reel_url=$19 WHERE id=$20 RETURNING *',
-      [name, description, sizesJson, stock, image_url, imagesJson, color, category, model || null, is_active, is_bestseller, is_trending, is_offer, is_festive, variantsJson, reviewsJson, detailsJson, allow_reviews ?? true, instagram_reel_url || null, req.params.id]
+      'UPDATE products SET name=$1, description=$2, sizes=$3, stock=$4, image_url=$5, images=$6, color=$7, category=$8, model=$9, is_active=$10, is_bestseller=$11, is_trending=$12, is_offer=$13, is_festive=$14, variants=$15, reviews=$16, details=$17, allow_reviews=$18, instagram_reel_url=$19, cgst=$20, sgst=$21 WHERE id=$22 RETURNING *',
+      [name, description, sizesJson, stock, image_url, imagesJson, color, category, model || null, is_active, is_bestseller, is_trending, is_offer, is_festive, variantsJson, reviewsJson, detailsJson, allow_reviews ?? true, instagram_reel_url || null, parseFloat(req.body.cgst) || 0, parseFloat(req.body.sgst) || 0, req.params.id]
     );
     res.json({ product: result.rows[0] });
   } catch (err) {

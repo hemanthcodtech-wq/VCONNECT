@@ -328,16 +328,23 @@ router.post('/validate-coupon', async (req, res) => {
 
       for (const item of cartItems) {
         let isEligible = false;
-        if (hasCatTarget && coupon.applicable_categories.includes(item.category)) {
+        const prod = item.product || {};
+        const variant = item.variant || {};
+        const itemCategory = prod.category;
+        const itemCode = variant.code || prod.product_code || prod.code;
+
+        if (hasCatTarget && coupon.applicable_categories.includes(itemCategory)) {
           isEligible = true;
         }
-        if (hasCodeTarget && coupon.applicable_product_codes.includes(item.code)) {
+        if (hasCodeTarget && coupon.applicable_product_codes.includes(itemCode)) {
           isEligible = true;
         }
         
         if (isEligible) {
           eligibleQty += (item.qty || 1);
-          const currentPrice = item.our_price && item.our_price > 0 ? item.our_price : item.mrp;
+          const price = Number(variant.price || prod.price || 0);
+          const mrp = Number(variant.mrp || prod.mrp || 0);
+          const currentPrice = price > 0 ? price : mrp;
           eligibleValue += (currentPrice * (item.qty || 1));
         }
       }

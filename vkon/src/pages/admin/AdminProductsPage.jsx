@@ -12,7 +12,7 @@ export function AdminProductsPage() {
   const [editProduct, setEditProduct] = useState(null);
   
   const initialFormData = { 
-    name: "", description: "", product_code: "", instagram_reel_url: "", category: "", model: "", is_active: true, allow_reviews: true,
+    name: "", description: "", product_code: "", instagram_reel_url: "", category: "", model: "", is_active: true, allow_reviews: true, cgst: 0, sgst: 0,
     variants: [
       { color: "", instagram_link: "", images: [], sizes: [{ size: "", mrp: "", our_price: "",  stock: 0, stock_delta: "", code: "", weight: "", offer_id: "" }] }
     ],
@@ -132,7 +132,9 @@ export function AdminProductsPage() {
       variants: variants,
       details: product.details || [],
       reviews: product.reviews || [],
-      allow_reviews: product.allow_reviews ?? true
+      allow_reviews: product.allow_reviews ?? true,
+      cgst: parseFloat(product.cgst) || 0,
+      sgst: parseFloat(product.sgst) || 0
     });
     setEditProduct(product);
     setIsNew(false);
@@ -448,6 +450,19 @@ export function AdminProductsPage() {
                       className="w-4 h-4 text-gray-900" />
                     <span className="text-sm font-sans font-semibold text-gray-900 cursor-pointer">Enable reviews</span>
                   </div>
+                </div>
+              </div>
+              
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="text-xs font-sans font-semibold text-gray-900/70 mb-1 block">CGST (%)</label>
+                  <input type="number" value={formData.cgst} onChange={(e) => setFormData({ ...formData, cgst: parseFloat(e.target.value) || 0 })}
+                    className="w-full px-3 py-2 rounded-lg bg-[#FDF8F0] border border-brand-blue/10 focus:outline-none" placeholder="e.g. 9" />
+                </div>
+                <div>
+                  <label className="text-xs font-sans font-semibold text-gray-900/70 mb-1 block">SGST (%)</label>
+                  <input type="number" value={formData.sgst} onChange={(e) => setFormData({ ...formData, sgst: parseFloat(e.target.value) || 0 })}
+                    className="w-full px-3 py-2 rounded-lg bg-[#FDF8F0] border border-brand-blue/10 focus:outline-none" placeholder="e.g. 9" />
                 </div>
               </div>
 
