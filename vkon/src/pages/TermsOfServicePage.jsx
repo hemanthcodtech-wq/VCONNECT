@@ -305,9 +305,9 @@ export function TermsOfServicePage() {
           <p>If you have questions regarding these Terms, an order, payment, or another issue, please contact us:</p>
           <ul className="list-none pl-0 space-y-2 font-medium">
             <li><strong>VConnect</strong></li>
-            <li>Email: <a href="#" className="text-brand-blue underline"></a></li>
+            <li>Email: <a href="mailto:vconnectcbp@gmail.com" className="text-brand-blue underline">vconnectcbp@gmail.com</a></li>
             <li>Website: <a href="https://vconnect.com" target="_blank" rel="noopener noreferrer" className="text-brand-blue underline">https://vconnect.com</a></li>
-            <li>Address: 10-34 Malkapur X road, Sangareddy-502001</li>
+            <li>Address: SHOP NO 9, APMC YARD, M G ROAD, Chikkaballapur, Karnataka 562101</li>
           </ul>
         </div>
       </div>

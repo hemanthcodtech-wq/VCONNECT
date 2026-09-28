@@ -40,7 +40,7 @@ const sections = [
       'We ship to all pin codes across India through our trusted logistics partners.',
       'International shipping is available to select countries — please contact us before placing your international order.',
       'For international orders, additional customs duties or import taxes may apply depending on your country.',
-      'Contact us at  or WhatsApp +91 88860 00847 for international shipping rates.',
+      'Contact us at vconnectcbp@gmail.com or WhatsApp +91 97404 86666 for international shipping rates.',
     ],
   },
   {
@@ -223,7 +223,7 @@ export function ShippingPolicyPage() {
                 </div>
                 <div>
                   <p className="text-xs text-gray-900/40 font-semibold uppercase tracking-widest">WhatsApp</p>
-                  <p className="text-gray-900/80 text-sm mt-0.5">+91 88860 00847</p>
+                  <p className="text-gray-900/80 text-sm mt-0.5">+91 97404 86666</p>
                 </div>
                 <div>
                   <p className="text-xs text-gray-900/40 font-semibold uppercase tracking-widest">Hours</p>

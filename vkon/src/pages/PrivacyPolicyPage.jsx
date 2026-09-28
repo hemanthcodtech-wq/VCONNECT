@@ -464,9 +464,9 @@ export function PrivacyPolicyPage() {
           <p>If you have questions about this Privacy Policy, want to exercise an applicable privacy right, or believe that personal information has been collected from a child under 13, please contact us:</p>
           <ul className="list-none pl-0 space-y-2 font-medium">
             <li><strong>VConnect</strong></li>
-            <li>Privacy Email: <a href="#" className="text-brand-blue underline"></a></li>
+            <li>Privacy Email: <a href="mailto:vconnectcbp@gmail.com" className="text-brand-blue underline">vconnectcbp@gmail.com</a></li>
             <li>Website: <a href="https://vconnect.com" target="_blank" rel="noopener noreferrer" className="text-brand-blue underline">https://vconnect.com</a></li>
-            <li>Business Address: 10-34 Malkapur X road, Sangareddy-502001</li>
+            <li>Business Address: SHOP NO 9, APMC YARD, M G ROAD, Chikkaballapur, Karnataka 562101</li>
           </ul>
           <p className="text-sm text-gray-600 mt-2">When contacting us regarding a privacy request, please provide enough information for us to identify and process your request.</p>
 

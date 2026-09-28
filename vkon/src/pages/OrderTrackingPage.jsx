@@ -158,7 +158,7 @@ export function OrderTrackingPage() {
                   <div>
                     <p className="text-sm font-bold text-gray-900">Pickup Notification</p>
                     <p className="text-xs text-gray-700 mt-1 leading-relaxed">
-                      Once your order is ready, our team will message you for pickup via <strong>WhatsApp/Text message</strong> from <strong>+91 88860 00847</strong>
+                      Once your order is ready, our team will message you for pickup via <strong>WhatsApp/Text message</strong> from <strong>+91 97404 86666</strong>
                     </p>
                   </div>
                 </div>
@@ -166,7 +166,7 @@ export function OrderTrackingPage() {
                   <MapPin className="w-5 h-5 text-[#0033a0] shrink-0 mt-0.5" />
                   <div>
                     <p className="text-sm font-bold text-gray-900">Pickup Location</p>
-                    <p className="text-xs text-gray-700 mt-1">10-34 Malkapur X road, Sangareddy-502001</p>
+                    <p className="text-xs text-gray-700 mt-1">SHOP NO 9, APMC YARD, M G ROAD, Chikkaballapur, Karnataka 562101</p>
                     <a
                       href="https://maps.google.com/?q=Aspari+main+road+opposite+APGB+Bank,+518347"
                       target="_blank" rel="noopener noreferrer"

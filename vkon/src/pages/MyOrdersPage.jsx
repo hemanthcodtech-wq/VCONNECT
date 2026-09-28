@@ -410,7 +410,7 @@ export function MyOrdersPage() {
                             <MapPin className="w-4 h-4 text-blue-600 shrink-0 mt-0.5" />
                             <div>
                               <p className="text-xs font-bold text-blue-800">Pickup Location</p>
-                              <p className="text-xs text-blue-700">10-34 Malkapur X road, Sangareddy-502001</p>
+                              <p className="text-xs text-blue-700">SHOP NO 9, APMC YARD, M G ROAD, Chikkaballapur, Karnataka 562101</p>
                               <a href="https://maps.google.com/?q=Aspari+main+road+opposite+APGB+Bank,+518347" target="_blank" rel="noopener noreferrer"
                                 className="text-xs text-blue-600 font-bold underline">View on Maps →</a>
                             </div>

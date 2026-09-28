@@ -35,7 +35,7 @@ function CountUp({ end, suffix = '', duration = 1800 }) {
   return <span ref={ref}>{count}{suffix}</span>;
 }
 
-const WHATSAPP_NUMBER = '918886000847';
+const WHATSAPP_NUMBER = '919740486666';
 
 function ContactForm() {
   const [form, setForm] = useState({ name: '', email: '', subject: '', message: '' });
@@ -169,7 +169,7 @@ export function ContactPage() {
               </div>
               <div>
                 <h3 className="font-bold text-gray-900 text-lg mb-1">Store Location</h3>
-                <p className="text-gray-900/70 text-sm leading-relaxed">10-34 Malkapur X road, Sangareddy-502001</p>
+                <p className="text-gray-900/70 text-sm leading-relaxed">SHOP NO 9, APMC YARD, M G ROAD, Chikkaballapur, Karnataka 562101</p>
                 <p className="text-gray-900/40 text-xs mt-1">Open for quick pickup & in-store shopping</p>
               </div>
             </div>
@@ -181,7 +181,7 @@ export function ContactPage() {
               </div>
               <div>
                 <h3 className="font-bold text-gray-900 text-lg mb-1">Call & WhatsApp</h3>
-                <p className="text-gray-900/70 text-sm">+91 88860 00847</p>
+                <p className="text-gray-900/70 text-sm">+91 97404 86666</p>
                 <p className="text-gray-900/40 text-xs mt-1">Mon–Sun, 9:00 AM – 9:00 PM</p>
               </div>
             </div>
@@ -258,7 +258,7 @@ export function ContactPage() {
             </div>
           </div>
           <a
-            href="https://wa.me/918886000847"
+            href="https://wa.me/919740486666"
             target="_blank"
             rel="noopener noreferrer"
             className="shrink-0 bg-white text-brand-blue font-bold py-4 px-8 rounded-xl hover:scale-105 hover:shadow-2xl transition-all text-sm md:text-base"

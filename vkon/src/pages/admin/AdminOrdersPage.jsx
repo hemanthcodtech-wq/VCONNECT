@@ -954,9 +954,9 @@ const updateStatus = async (orderId, status) => {
 <body>
   <div class="text-center">
     <div class="bold" style="font-size:16px;">VConnect</div>
-    <div class="header-text">10-34 Malkapur X road, Sangareddy-502001</div>
-    <div class="header-text">Ph/WhatsApp: +91 88860 00847</div>
-    <div class="header-text">GSTIN: 36DABPP4028M1ZG</div>
+    <div class="header-text">SHOP NO 9, APMC YARD, M G ROAD, Chikkaballapur, Karnataka 562101</div>
+    <div class="header-text">Ph/WhatsApp: +91 97404 86666</div>
+    <div class="header-text">GSTIN: 29ASAPL1242M1ZO</div>
     <div class="divider"></div>
     <div class="title">TAX INVOICE</div>
     <div class="divider"></div>

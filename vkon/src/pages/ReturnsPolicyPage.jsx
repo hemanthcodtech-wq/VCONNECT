@@ -12,7 +12,7 @@ const claimSteps = [
   {
     num: '02',
     title: 'Report Within 7 Days',
-    desc: 'Contact us within 7 days of delivery via WhatsApp (+91 88860 00847) or email (). Include your order number, a description of the issue, and attach the unboxing video as proof.',
+    desc: 'Contact us within 7 days of delivery via WhatsApp (+91 97404 86666) or email (vconnectcbp@gmail.com). Include your order number, a description of the issue, and attach the unboxing video as proof.',
   },
   {
     num: '03',
@@ -306,7 +306,7 @@ export function ReturnsPolicyPage() {
                 className="block w-full bg-brand-blue text-white text-gray-900 font-bold py-3 rounded-xl text-sm hover:bg-brand-blue text-white/80 transition-all">
                 Chat on WhatsApp
               </a>
-              <a href="#"
+              <a href="mailto:vconnectcbp@gmail.com"
                 className="block w-full mt-3 border border-white/20 text-white/70 font-semibold py-3 rounded-xl text-sm hover:bg-white/10 transition-all">
                 Email Us
               </a>
@@ -327,7 +327,7 @@ export function ReturnsPolicyPage() {
                 </div>
                 <div>
                   <p className="text-xs text-gray-900/40 font-semibold uppercase tracking-widest">WhatsApp</p>
-                  <p className="text-gray-900/80 text-sm mt-0.5">+91 88860 00847</p>
+                  <p className="text-gray-900/80 text-sm mt-0.5">+91 97404 86666</p>
                 </div>
                 <div>
                   <p className="text-xs text-gray-900/40 font-semibold uppercase tracking-widest">Hours</p>

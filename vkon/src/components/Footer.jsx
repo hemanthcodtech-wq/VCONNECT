@@ -66,11 +66,11 @@ export function Footer() {
             <h3 className="text-lg font-bold mb-2" className="text-white">Contact Us</h3>
             <div className="flex items-start gap-3 text-sm text-white/80 font-medium">
               <MapPin className="w-5 h-5 shrink-0 text-white" />
-              <span>10-34 Malkapur X road, Sangareddy-502001</span>
+              <span>SHOP NO 9, APMC YARD, M G ROAD, Chikkaballapur, Karnataka 562101</span>
             </div>
             <div className="flex items-center gap-3 text-sm text-white/80 font-medium">
               <Phone className="w-5 h-5 shrink-0 text-white" />
-              <span>+91 88860 00847</span>
+              <span>+91 97404 86666</span>
             </div>
             <div className="flex items-center gap-3 text-sm text-white/80 font-medium">
               <Mail className="w-5 h-5 shrink-0 text-white" />
