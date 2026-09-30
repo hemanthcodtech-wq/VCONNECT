@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Store, Plus, ArrowRight, Search } from 'lucide-react';
+import { Store, Plus, ArrowRight, Search, LogOut } from 'lucide-react';
 import { useAuthStore } from '../store/useAuthStore';
 import brandLogo from '../assets/logo.png';
 
@@ -10,7 +10,7 @@ export function SelectStorePage() {
   const [searchParams] = useSearchParams();
   const redirect = searchParams.get('redirect') || '/';
   
-  const { stores, fetchStores, setSelectedStore, createStore, user } = useAuthStore();
+  const { stores, fetchStores, setSelectedStore, createStore, user, logout } = useAuthStore();
   const [isCreating, setIsCreating] = useState(false);
   const [newStore, setNewStore] = useState({ name: '', owner_name: '', email: '', phone: '', address: '', certificate_url: '' });
   const [searchQuery, setSearchQuery] = useState('');
@@ -76,7 +76,17 @@ export function SelectStorePage() {
         animate={{ opacity: 1, y: 0 }}
         className="bg-white rounded-3xl shadow-xl w-full max-w-md p-8 border border-gray-100"
       >
-        <div className="flex flex-col items-center mb-6">
+        <div className="flex flex-col items-center mb-6 relative">
+          <button 
+            onClick={() => {
+              logout();
+              navigate('/login');
+            }}
+            className="absolute top-0 right-0 p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-full transition-colors"
+            title="Logout"
+          >
+            <LogOut className="w-5 h-5" />
+          </button>
           <img src={brandLogo} alt="VConnect2U" className="h-14 mb-2 drop-shadow-md" />
           <h1 className="text-2xl font-bold text-gray-900">Welcome, {user?.name || 'Employee'}</h1>
           <p className="text-sm text-gray-500 text-center mt-1">Please select the store you are working at today, or create a new one.</p>
