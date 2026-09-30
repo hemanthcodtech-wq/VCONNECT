@@ -622,7 +622,7 @@ export function SignupPage() {
             transition={{ duration: 0.4, ease: 'easeOut' }} className="w-full">
             <div className="flex flex-col items-center mb-5">
               <Link to="/login">
-                <img src={logoImg} alt="VConnect" className="h-12 w-auto drop-shadow-md hover:scale-105 transition-transform" />
+                <img src={logoImg} alt="VConnect2U" className="h-12 w-auto drop-shadow-md hover:scale-105 transition-transform" />
               </Link>
             </div>
             {step !== 'done' && <StepBar step={step} />}
@@ -643,7 +643,7 @@ export function SignupPage() {
 
           {/* Logo */}
           <div className="relative z-10 inline-block bg-white rounded-xl py-1.5 px-3 shadow-[0_0_25px_rgba(255,255,255,0.6)] border border-white">
-            <img src={logoImg} alt="VConnect Logo" className="h-7 w-auto object-contain" />
+            <img src={logoImg} alt="VConnect2U Logo" className="h-7 w-auto object-contain" />
           </div>
 
           {/* Title area */}

@@ -203,14 +203,14 @@ export function AboutPage() {
               <div className="mx-auto flex h-[68px] w-[68px] items-center justify-center rounded-[22px] border border-white/70 bg-white/90 p-2 shadow-lg backdrop-blur-xs">
                 <img
                   src={logo}
-                  alt="VConnect logo"
+                  alt="VConnect2U logo"
                   className="h-full w-full object-contain"
                   decoding="async"
                   loading="eager"
                 />
               </div>
               <p className="mt-2 text-[9px] font-bold uppercase tracking-[0.22em] text-white drop-shadow-sm">
-                VConnect
+                VConnect2U
               </p>
             </div>
 
@@ -225,7 +225,7 @@ export function AboutPage() {
                 A familiar market, made for your everyday.
               </h1>
               <p className="mt-3 max-w-[690px] text-[13px] leading-[1.65] text-brand-maroon/80 md:text-base">
-                VConnect is here for the moments between the big plans: a quick top-up, a fresh dinner, and the ingredients that make home feel like home.
+                VConnect2U is here for the moments between the big plans: a quick top-up, a fresh dinner, and the ingredients that make home feel like home.
               </p>
               <a
                 href="#aisles"

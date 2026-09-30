@@ -324,7 +324,7 @@ export function CartPage() {
                   Proceed to Checkout
                 </button>
                 <p className="text-center text-xs text-gray-400 mt-4 flex items-center justify-center gap-1">
-                  Secure checkout powered by VConnect
+                  Secure checkout powered by VConnect2U
                 </p>
               </div>
             </div>

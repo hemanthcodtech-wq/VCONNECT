@@ -123,7 +123,7 @@ export function MyOrdersPage() {
   ${taxAmt > 0 ? `<tr><td style="text-align:right;padding:6px 12px;color:#555;">Tax</td><td style="text-align:right;padding:6px 12px;font-weight:600;">₹${taxAmt.toFixed(2)}</td></tr>` : ''}
   <tr style="background:#FDF8F0;"><td style="text-align:right;padding:10px 12px;font-weight:700;font-size:11pt;border-top:2px solid #08183A;">TOTAL</td><td style="text-align:right;padding:10px 12px;font-weight:700;font-size:11pt;color:#D4AF37;border-top:2px solid #08183A;">₹${Number(order.total).toFixed(2)}</td></tr>
 </table>
-<div style="margin-top:24px;text-align:center;font-size:9pt;color:#999;">Thank you for shopping with VConnect!</div>
+<div style="margin-top:24px;text-align:center;font-size:9pt;color:#999;">Thank you for shopping with VConnect2U!</div>
 </body></html>`;
   };
 

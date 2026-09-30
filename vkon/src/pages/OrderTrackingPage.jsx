@@ -70,7 +70,7 @@ export function OrderTrackingPage() {
           className="text-center space-y-3 mb-10"
         >
           <h1 className="text-3xl md:text-4xl font-serif font-bold text-gray-900">Order Placed Successfully!</h1>
-          <p className="text-gray-500 text-sm md:text-base">Thank you for shopping with VConnect. Your order is being prepared and will be with you shortly!</p>
+          <p className="text-gray-500 text-sm md:text-base">Thank you for shopping with VConnect2U. Your order is being prepared and will be with you shortly!</p>
         </motion.div>
 
         <motion.div 

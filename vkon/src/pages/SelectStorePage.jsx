@@ -77,7 +77,7 @@ export function SelectStorePage() {
         className="bg-white rounded-3xl shadow-xl w-full max-w-md p-8 border border-gray-100"
       >
         <div className="flex flex-col items-center mb-6">
-          <img src={brandLogo} alt="VConnect" className="h-14 mb-2 drop-shadow-md" />
+          <img src={brandLogo} alt="VConnect2U" className="h-14 mb-2 drop-shadow-md" />
           <h1 className="text-2xl font-bold text-gray-900">Welcome, {user?.name || 'Employee'}</h1>
           <p className="text-sm text-gray-500 text-center mt-1">Please select the store you are working at today, or create a new one.</p>
         </div>

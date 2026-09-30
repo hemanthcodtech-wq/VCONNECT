@@ -59,9 +59,9 @@ async function migrate() {
   await newPool.query('TRUNCATE TABLE products CASCADE;');
   console.log('✅ Products table cleared (0 rows).');
 
-  // 5. Seed admin user admin@vconnect.com
-  console.log('👤 Seeding admin user admin@vconnect.com...');
-  const adminEmail = 'admin@vconnect.com';
+  // 5. Seed admin user admin@vconnect2u.com
+  console.log('👤 Seeding admin user admin@vconnect2u.com...');
+  const adminEmail = 'admin@vconnect2u.com';
   const adminPass = await bcrypt.hash('Admin@1234', 10);
   await newPool.query(`
     INSERT INTO users (name, email, phone, password_hash, is_verified, role)

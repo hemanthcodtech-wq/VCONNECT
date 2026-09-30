@@ -140,7 +140,7 @@ export function ReturnsPolicyPage() {
               <div>
                 <h3 className="font-bold text-red-700 text-lg mb-2">No Returns or Exchanges</h3>
                 <p className="text-red-600 text-sm leading-relaxed">
-                  All sales at VConnect are <strong>final</strong>. We do not accept returns or exchanges for any reason, including change of mind, sizing issues, or personal preference. Please review your order carefully before completing your purchase.
+                  All sales at VConnect2U are <strong>final</strong>. We do not accept returns or exchanges for any reason, including change of mind, sizing issues, or personal preference. Please review your order carefully before completing your purchase.
                 </p>
               </div>
             </motion.div>

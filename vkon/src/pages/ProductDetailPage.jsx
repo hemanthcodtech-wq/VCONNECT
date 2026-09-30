@@ -720,7 +720,7 @@ export function ProductDetailPage() {
                   </div>
                   <div className="py-2 flex justify-between">
                     <span className="text-gray-500 font-medium">Seller</span>
-                    <span className="text-gray-900 font-bold">VConnect</span>
+                    <span className="text-gray-900 font-bold">VConnect2U</span>
                   </div>
                 </div>
               </div>

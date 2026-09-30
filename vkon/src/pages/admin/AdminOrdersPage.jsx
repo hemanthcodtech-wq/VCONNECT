@@ -6,7 +6,7 @@ import logoUrl from '../../assets/logo.png';
 
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:5000/api";
 const FROM_ADDRESS = {
-  name: "VConnect",
+  name: "VConnect2U",
   line1: "1-1-738, Vinayaka temple road",
   city: "Koratla",
   state: "Telangana",
@@ -953,7 +953,7 @@ const updateStatus = async (orderId, status) => {
 </head>
 <body>
   <div class="text-center">
-    <div class="bold" style="font-size:16px;">VConnect</div>
+    <div class="bold" style="font-size:16px;">VConnect2U</div>
     <div class="header-text">SHOP NO 9, APMC YARD, M G ROAD, Chikkaballapur, Karnataka 562101</div>
     <div class="header-text">Ph/WhatsApp: +91 97404 86666</div>
     <div class="header-text">GSTIN: 29ASAPL1242M1ZO</div>
@@ -1068,7 +1068,7 @@ const updateStatus = async (orderId, status) => {
       `Hi ${order.user_name || address.name || 'Customer'}! 🙏 Please find your *Invoice* for Order *#${order.order_number || order.id}* below:\n\n` +
       `*Items:*\n${itemsText}\n\n` +
       `*Total: ₹${order.total}*\n\n` +
-      `Thank you for shopping with VConnect!`
+      `Thank you for shopping with VConnect2U!`
     );
     window.open(`https://wa.me/${phone}?text=${msg}`, "_blank");
   };
@@ -1114,7 +1114,7 @@ const updateStatus = async (orderId, status) => {
 <body>
 <div class="box">
   <div class="hdr">
-    <div class="brand">VConnect</div>
+    <div class="brand">VConnect2U</div>
     <div class="oid">#${order.order_number || order.id}</div>
   </div>
   <div class="sec">

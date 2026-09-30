@@ -7,10 +7,10 @@ const PORT = process.env.PORT || 5000;
 
 const allowedOrigins = [
   'http://localhost:5173',
-  'https://vconnecthi.vercel.app',
-  'https://vconnect-theta.vercel.app',
-  'https://www.vconnect2u.in',
-  'https://vconnect2u.in',
+  'https://vconnect2uhi.vercel.app',
+  'https://vconnect2u-theta.vercel.app',
+  'https://www.vconnect2u2u.in',
+  'https://vconnect2u2u.in',
 
 
   process.env.FRONTEND_URL

@@ -6,7 +6,7 @@ async function updateAnnouncement() {
       is_active: true,
       items: [
         { text: "Free shipping on orders above $100", link: "" },
-        { text: "Welcome to VConnect!", link: "" }
+        { text: "Welcome to VConnect2U!", link: "" }
       ]
     };
     await pool.query("UPDATE settings SET value = $1 WHERE key = 'announcement'", [JSON.stringify(value)]);

@@ -580,14 +580,14 @@ router.post('/orders/:id/shippo-rates', authMiddleware, adminOnly, async (req, r
     try { address = typeof order.address === 'string' ? JSON.parse(order.address) : (order.address || {}); } catch(e) {}
 
     const addressFrom = {
-      name: 'VConnect',
+      name: 'VConnect2U',
       street1: '123 Main St',
       city: 'San Francisco',
       state: 'CA',
       zip: '94117',
       country: 'US',
       phone: '+1 555 341 9393',
-      email: 'admin@vconnect.com',
+      email: 'admin@vconnect2u.com',
     };
 
     const addressTo = {
@@ -622,7 +622,7 @@ router.post('/orders/:id/shippo-rates', authMiddleware, adminOnly, async (req, r
         contentsType: 'MERCHANDISE',
         nonDeliveryOption: 'RETURN',
         certify: true,
-        certifySigner: 'VConnect',
+        certifySigner: 'VConnect2U',
         eelPfc: 'NOEEI_30_37_a',
         items: [{
           description: 'Jewelry',

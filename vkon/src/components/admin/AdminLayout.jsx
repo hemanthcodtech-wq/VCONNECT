@@ -34,7 +34,7 @@ export function AdminLayout({ children }) {
     const token = localStorage.getItem("token");
     if (!token) {
       // Mocking admin login for demo purposes based on requirements
-      setAdmin({ name: "Admin User", email: "admin@vconnect.com" });
+      setAdmin({ name: "Admin User", email: "admin@vconnect2u.com" });
       return;
     }
 

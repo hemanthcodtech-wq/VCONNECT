@@ -20,13 +20,13 @@ const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
 async function sendOTPEmail(email, otp, name) {
   await transporter.sendMail({
-    from: `"VConnect" <${process.env.EMAIL_USER}>`,
+    from: `"VConnect2U" <${process.env.EMAIL_USER}>`,
     to: email,
-    subject: 'Your OTP for VConnect Signup',
+    subject: 'Your OTP for VConnect2U Signup',
       html: `
         <div style="font-family:Arial,sans-serif;max-width:480px;margin:auto;padding:24px;border:2px solid #0033a0;border-radius:12px;background-color:#ffffff;">
           <div style="text-align:center;margin-bottom:20px;">
-            <h2 style="color:#0033a0;margin:0;font-size:24px;">VConnect</h2>
+            <h2 style="color:#0033a0;margin:0;font-size:24px;">VConnect2U</h2>
             <p style="color:#F29D38;margin:5px 0 0 0;font-weight:bold;font-size:14px;">Premium Grains & Spices Delivered Daily</p>
           </div>
           <p style="color:#333;font-size:16px;">Hi <strong>${name}</strong>,</p>
@@ -55,7 +55,7 @@ async function sendSMSOTP(phone, otp, name) {
 
   try {
     await twilioClient.messages.create({
-      body: `Your VConnect OTP is ${otp}. Valid for 10 minutes.`,
+      body: `Your VConnect2U OTP is ${otp}. Valid for 10 minutes.`,
       from: process.env.TWILIO_PHONE_NUMBER,
       to: formattedPhone
     });
@@ -444,13 +444,13 @@ router.post('/forgot-password', async (req, res) => {
     await pool.query('DELETE FROM otps WHERE email=$1', [email]);
     await pool.query('INSERT INTO otps (email, otp, expires_at) VALUES ($1,$2,$3)', [email, otp, expiresAt]);
     await transporter.sendMail({
-      from: `"VConnect" <${process.env.EMAIL_USER}>`,
+      from: `"VConnect2U" <${process.env.EMAIL_USER}>`,
       to: email,
-      subject: 'Reset Your VConnect Password',
+      subject: 'Reset Your VConnect2U Password',
       html: `
         <div style="font-family:Arial,sans-serif;max-width:480px;margin:auto;padding:24px;border:2px solid #0033a0;border-radius:12px;background-color:#ffffff;">
           <div style="text-align:center;margin-bottom:20px;">
-            <h2 style="color:#0033a0;margin:0;font-size:24px;">VConnect</h2>
+            <h2 style="color:#0033a0;margin:0;font-size:24px;">VConnect2U</h2>
             <p style="color:#F29D38;margin:5px 0 0 0;font-weight:bold;font-size:14px;">🔐 Password Reset</p>
           </div>
           <p style="color:#333;font-size:16px;">Hi <strong>${result.rows[0].name}</strong>,</p>

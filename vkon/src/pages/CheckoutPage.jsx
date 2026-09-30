@@ -271,7 +271,7 @@ function RazorpayPaymentForm({ isPlacingOrder, handlePlaceOrder, termsAccepted, 
           <input type="checkbox" checked={termsAccepted} onChange={e => setTermsAccepted(e.target.checked)}
             className="mt-0.5 w-4 h-4 accent-brand-dark-blue shrink-0" />
           <span className="text-[11px] text-gray-500 leading-relaxed">
-            I agree to the VConnect <a href="/terms-of-service" target="_blank" className="text-gray-900 font-bold underline">Terms & Conditions</a> and <a href="/privacy-policy" target="_blank" className="text-gray-900 font-bold underline">Privacy Policy</a>, understand that all sales are final—no returns or exchanges—as stated in the Shipping & Return Policy.
+            I agree to the VConnect2U <a href="/terms-of-service" target="_blank" className="text-gray-900 font-bold underline">Terms & Conditions</a> and <a href="/privacy-policy" target="_blank" className="text-gray-900 font-bold underline">Privacy Policy</a>, understand that all sales are final—no returns or exchanges—as stated in the Shipping & Return Policy.
           </span>
         </label>
         <button
@@ -1122,7 +1122,7 @@ export function CheckoutPage() {
             </div>
             <h2 ref={textRef} className="text-2xl font-serif font-bold text-gray-900">Order Confirmed!</h2>
             <p className="text-sm text-gray-600 max-w-sm leading-relaxed">
-              Thank you for placing your order with VConnect. We're delighted to begin preparing your selection and will keep you updated throughout its journey to you.
+              Thank you for placing your order with VConnect2U. We're delighted to begin preparing your selection and will keep you updated throughout its journey to you.
             </p>
             {transactionId && (
               <p className="text-xs text-gray-400 font-mono bg-gray-100 px-4 py-2 rounded-lg">

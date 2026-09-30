@@ -14,7 +14,7 @@ export function PrivacyPolicyPage() {
 
         <div className="prose prose-sm md:prose-base prose-blue max-w-none text-gray-700 space-y-6">
           <p>
-            VConnect (“VConnect,” “we,” “us,” or “our”) respects your privacy and is committed to protecting the personal information you provide when you visit or use our website, create an account, place an order, contact us, or otherwise interact with our products and services.
+            VConnect2U (“VConnect2U,” “we,” “us,” or “our”) respects your privacy and is committed to protecting the personal information you provide when you visit or use our website, create an account, place an order, contact us, or otherwise interact with our products and services.
           </p>
           <p>
             This Privacy Policy explains what personal information we collect, how we collect and use it, when we share it, how we protect it, how long we retain it, and the choices and rights that may be available to you.
@@ -28,7 +28,7 @@ export function PrivacyPolicyPage() {
 
           <h2 className="text-xl md:text-2xl font-bold text-gray-900 mt-10 mb-4">1. Who We Are</h2>
           <p>
-            VConnect is a U.S.-based jewelry business that sells fashion jewelry through its online store and other sales channels.
+            VConnect2U is a U.S.-based jewelry business that sells fashion jewelry through its online store and other sales channels.
           </p>
           <p>
             For privacy-related questions or requests, please contact us using the information provided in the Contact Us section of this Privacy Policy.
@@ -37,7 +37,7 @@ export function PrivacyPolicyPage() {
           <h2 className="text-xl md:text-2xl font-bold text-gray-900 mt-10 mb-4">2. Age Requirement</h2>
           <p>Our website is intended for users who are 13 years of age or older.</p>
           <p>
-            You must be at least 13 years old to create an VConnect customer account or knowingly provide personal information to us through account registration.
+            You must be at least 13 years old to create an VConnect2U customer account or knowingly provide personal information to us through account registration.
           </p>
           <p>
             If you are under 13, please do not create an account, place an order, or provide personal information through our website.
@@ -61,10 +61,10 @@ export function PrivacyPolicyPage() {
           </p>
 
           <h2 className="text-xl md:text-2xl font-bold text-gray-900 mt-10 mb-4">3. Personal Information We Collect</h2>
-          <p>Depending on how you interact with VConnect, we may collect the following categories of personal information.</p>
+          <p>Depending on how you interact with VConnect2U, we may collect the following categories of personal information.</p>
 
           <h3 className="text-lg font-bold text-gray-900 mt-6 mb-2">A. Account Information</h3>
-          <p>When you create an VConnect account, we may collect:</p>
+          <p>When you create an VConnect2U account, we may collect:</p>
           <ul className="list-disc pl-6 space-y-1">
             <li>First and last name</li>
             <li>Email address</li>
@@ -75,7 +75,7 @@ export function PrivacyPolicyPage() {
             <li>Other information you voluntarily provide</li>
           </ul>
           <p>
-            Your password should be kept confidential. We recommend that you do not reuse your VConnect password on other websites.
+            Your password should be kept confidential. We recommend that you do not reuse your VConnect2U password on other websites.
           </p>
 
           <h3 className="text-lg font-bold text-gray-900 mt-6 mb-2">B. Shipping and Billing Information</h3>
@@ -114,7 +114,7 @@ export function PrivacyPolicyPage() {
             Payments may be processed through third-party payment processors. Depending on the payment method you select, the payment processor may collect payment information such as credit or debit card information.
           </p>
           <p>
-            VConnect does not intend to store complete payment card numbers or card security codes on its own servers. Payment information may instead be processed directly by our third-party payment providers according to their security practices and privacy policies.
+            VConnect2U does not intend to store complete payment card numbers or card security codes on its own servers. Payment information may instead be processed directly by our third-party payment providers according to their security practices and privacy policies.
           </p>
           <p>
             We may receive limited payment-related information, such as payment status, transaction identifiers, card type, or the last four digits of a payment card, where provided by our payment processor.
@@ -226,7 +226,7 @@ export function PrivacyPolicyPage() {
             <li>Promotions</li>
             <li>Sales</li>
             <li>Events</li>
-            <li>VConnect updates</li>
+            <li>VConnect2U updates</li>
           </ul>
           <p>Where consent is required, we will obtain the appropriate consent.</p>
           <p>You can unsubscribe from marketing emails at any time by using the unsubscribe mechanism included in the communication or by contacting us.</p>
@@ -237,9 +237,9 @@ export function PrivacyPolicyPage() {
           <p>Where applicable, we may provide a separate optional marketing checkbox during account registration, checkout, or another interaction.</p>
           <p>For example:</p>
           <blockquote className="border-l-4 border-brand-blue/10 pl-4 py-2 italic text-gray-600 bg-gray-50 rounded-r">
-            “Yes, I would like to receive emails from VConnect about new products, promotions, special offers, and updates. I understand that I can unsubscribe at any time.”
+            “Yes, I would like to receive emails from VConnect2U about new products, promotions, special offers, and updates. I understand that I can unsubscribe at any time.”
           </blockquote>
-          <p>Marketing consent is not required to purchase products from VConnect.</p>
+          <p>Marketing consent is not required to purchase products from VConnect2U.</p>
           <p>You may withdraw marketing consent at any time.</p>
 
           <h2 className="text-xl md:text-2xl font-bold text-gray-900 mt-10 mb-4">7. Cookies and Similar Technologies</h2>
@@ -304,7 +304,7 @@ export function PrivacyPolicyPage() {
             <li>Retargeting</li>
           </ul>
           <p>Some of these providers may use cookies, pixels, or similar technologies.</p>
-          <p>The actual providers used by VConnect may change over time.</p>
+          <p>The actual providers used by VConnect2U may change over time.</p>
 
           <h3 className="text-lg font-bold text-gray-900 mt-6 mb-2">Professional and Business Service Providers</h3>
           <p>We may share information with service providers such as accountants, attorneys, consultants, auditors, insurers, and other professionals where reasonably necessary for our business operations.</p>
@@ -324,16 +324,16 @@ export function PrivacyPolicyPage() {
           </ul>
 
           <h3 className="text-lg font-bold text-gray-900 mt-6 mb-2">Business Transactions</h3>
-          <p>If VConnect is involved in a merger, acquisition, financing, restructuring, sale of assets, sale of the business, bankruptcy, or similar transaction, personal information may be transferred as part of that transaction, subject to applicable law.</p>
+          <p>If VConnect2U is involved in a merger, acquisition, financing, restructuring, sale of assets, sale of the business, bankruptcy, or similar transaction, personal information may be transferred as part of that transaction, subject to applicable law.</p>
 
           <h2 className="text-xl md:text-2xl font-bold text-gray-900 mt-10 mb-4">9. Third-Party Service Providers</h2>
-          <p>Third-party companies that provide services to VConnect may process personal information on our behalf or independently according to their own privacy practices.</p>
+          <p>Third-party companies that provide services to VConnect2U may process personal information on our behalf or independently according to their own privacy practices.</p>
           <p>Examples may include payment processors, shipping providers, website hosting providers, analytics providers, email providers, security providers, and advertising providers.</p>
           <p>These companies may have their own privacy policies.</p>
           <p>We encourage you to review the privacy policies of third-party services you interact with.</p>
 
           <h2 className="text-xl md:text-2xl font-bold text-gray-900 mt-10 mb-4">10. Order History and Customer Accounts</h2>
-          <p>If you create an VConnect account, we may maintain information associated with your account, including:</p>
+          <p>If you create an VConnect2U account, we may maintain information associated with your account, including:</p>
           <ul className="list-disc pl-6 space-y-1">
             <li>Account details</li>
             <li>Saved addresses</li>
@@ -371,10 +371,10 @@ export function PrivacyPolicyPage() {
           <p>When information is no longer reasonably necessary, we may delete, anonymize, or securely dispose of it, subject to applicable legal and business requirements.</p>
 
           <h2 className="text-xl md:text-2xl font-bold text-gray-900 mt-10 mb-4">13. Children's and Teen Privacy</h2>
-          <p>VConnect is a 13+ general-audience website and is not directed toward children under 13.</p>
+          <p>VConnect2U is a 13+ general-audience website and is not directed toward children under 13.</p>
           <p>We do not knowingly collect personal information from children under 13 through account registration or knowingly permit children under 13 to create accounts.</p>
           <p>If we learn that we have collected personal information from a child under 13 in circumstances where parental consent was legally required, we will take reasonable steps to delete the information as required by applicable law.</p>
-          <p>If a parent or guardian believes that a child under 13 has provided personal information to VConnect, they may contact us using the information in the “Contact Us” section.</p>
+          <p>If a parent or guardian believes that a child under 13 has provided personal information to VConnect2U, they may contact us using the information in the “Contact Us” section.</p>
           <p>For users between 13 and 17, we may collect information necessary to provide account, shopping, payment, shipping, customer support, and other disclosed services.</p>
           <p>We do not knowingly use a teenager's information for purposes that are prohibited by applicable law.</p>
           <p>Where applicable law provides additional privacy rights or protections for minors, we will honor those requirements.</p>
@@ -416,7 +416,7 @@ export function PrivacyPolicyPage() {
           <p>If applicable law provides a right to appeal our decision, you may contact us to request an appeal.</p>
 
           <h2 className="text-xl md:text-2xl font-bold text-gray-900 mt-10 mb-4">18. International Visitors</h2>
-          <p>VConnect is based in the United States.</p>
+          <p>VConnect2U is based in the United States.</p>
           <p>If you access our website from outside the United States, your personal information may be processed or stored in the United States or other countries where our service providers operate.</p>
           <p>Privacy laws in those locations may differ from the laws in your country.</p>
           <p>By using our website, you understand that your information may be transferred to and processed in the United States, subject to applicable law.</p>
@@ -424,21 +424,21 @@ export function PrivacyPolicyPage() {
 
           <h2 className="text-xl md:text-2xl font-bold text-gray-900 mt-10 mb-4">19. Third-Party Websites and Social Media</h2>
           <p>Our website may contain links to third-party websites, applications, social media platforms, payment services, shipping services, or other third-party services.</p>
-          <p>VConnect does not control the privacy practices of third-party websites or services.</p>
+          <p>VConnect2U does not control the privacy practices of third-party websites or services.</p>
           <p>If you leave our website or interact with a third-party service, that third party's privacy policy may apply.</p>
           <p>We encourage you to review the privacy policies of third parties before providing personal information.</p>
 
           <h2 className="text-xl md:text-2xl font-bold text-gray-900 mt-10 mb-4">20. Social Media Interactions</h2>
-          <p>If you interact with VConnect through social media platforms, those platforms may collect information about you according to their own privacy policies.</p>
-          <p>If you voluntarily post, comment, tag, message, or otherwise interact with VConnect publicly, information you provide may be visible to others depending on the platform and your account settings.</p>
+          <p>If you interact with VConnect2U through social media platforms, those platforms may collect information about you according to their own privacy policies.</p>
+          <p>If you voluntarily post, comment, tag, message, or otherwise interact with VConnect2U publicly, information you provide may be visible to others depending on the platform and your account settings.</p>
 
           <h2 className="text-xl md:text-2xl font-bold text-gray-900 mt-10 mb-4">21. Promotional Events and Customer Content</h2>
-          <p>From time to time, VConnect may conduct promotions, giveaways, events, or customer-content campaigns.</p>
+          <p>From time to time, VConnect2U may conduct promotions, giveaways, events, or customer-content campaigns.</p>
           <p>If you voluntarily submit information, photographs, reviews, testimonials, or other content, we may use that information according to the terms disclosed when you submit it and applicable law.</p>
           <p>Where separate permission is required to use your name, image, testimonial, photograph, or other content for promotional purposes, we will obtain the appropriate permission.</p>
 
           <h2 className="text-xl md:text-2xl font-bold text-gray-900 mt-10 mb-4">22. Account Deletion</h2>
-          <p>You may request that your VConnect account be deleted by contacting us.</p>
+          <p>You may request that your VConnect2U account be deleted by contacting us.</p>
           <p>When an account deletion request is received, we may delete or deactivate information associated with the account, subject to applicable law and legitimate business requirements.</p>
           <p>Deleting an account may not result in immediate deletion of every record.</p>
           <p>For example, we may retain certain transactions, tax, accounting, fraud-prevention, dispute, or legal records when required or reasonably necessary.</p>
@@ -463,17 +463,17 @@ export function PrivacyPolicyPage() {
           <h2 className="text-xl md:text-2xl font-bold text-gray-900 mt-10 mb-4">24. Contact Us</h2>
           <p>If you have questions about this Privacy Policy, want to exercise an applicable privacy right, or believe that personal information has been collected from a child under 13, please contact us:</p>
           <ul className="list-none pl-0 space-y-2 font-medium">
-            <li><strong>VConnect</strong></li>
+            <li><strong>VConnect2U</strong></li>
             <li>Privacy Email: <a href="mailto:vconnectcbp@gmail.com" className="text-brand-blue underline">vconnectcbp@gmail.com</a></li>
-            <li>Website: <a href="https://vconnect.com" target="_blank" rel="noopener noreferrer" className="text-brand-blue underline">https://vconnect.com</a></li>
+            <li>Website: <a href="https://vconnect2u.com" target="_blank" rel="noopener noreferrer" className="text-brand-blue underline">https://vconnect2u.com</a></li>
             <li>Business Address: SHOP NO 9, APMC YARD, M G ROAD, Chikkaballapur, Karnataka 562101</li>
           </ul>
           <p className="text-sm text-gray-600 mt-2">When contacting us regarding a privacy request, please provide enough information for us to identify and process your request.</p>
 
           <h2 className="text-xl md:text-2xl font-bold text-gray-900 mt-10 mb-4">25. Your Acknowledgment</h2>
-          <p>By using the VConnect website, you acknowledge that you have had an opportunity to review this Privacy Policy.</p>
-          <p>Where a separate consent is legally required for a particular processing activity, VConnect will obtain that consent separately.</p>
-          <p>This Privacy Policy does not replace the VConnect <Link to="/terms-of-service" className="text-brand-blue underline font-semibold">Terms & Conditions</Link>.</p>
+          <p>By using the VConnect2U website, you acknowledge that you have had an opportunity to review this Privacy Policy.</p>
+          <p>Where a separate consent is legally required for a particular processing activity, VConnect2U will obtain that consent separately.</p>
+          <p>This Privacy Policy does not replace the VConnect2U <Link to="/terms-of-service" className="text-brand-blue underline font-semibold">Terms & Conditions</Link>.</p>
         </div>
       </div>
       <Footer />

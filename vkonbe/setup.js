@@ -185,14 +185,14 @@ async function setup() {
 
   // Seed admin user
   const bcrypt = require('bcryptjs');
-  const adminEmail = 'admin@vconnect.com';
+  const adminEmail = 'admin@vconnect2u.com';
   const adminPass = await bcrypt.hash('Admin@1234', 10);
   await pool.query(`
     INSERT INTO users (name, email, phone, password_hash, is_verified, role)
     VALUES ('Admin', $1, '+91 00000 00000', $2, TRUE, 'admin')
     ON CONFLICT (email) DO UPDATE SET role='admin', is_verified=TRUE, password_hash=$2
   `, [adminEmail, adminPass]);
-  console.log('✅ Admin seeded → email: admin@vconnect.com | password: Admin@1234');
+  console.log('✅ Admin seeded → email: admin@vconnect2u.com | password: Admin@1234');
   process.exit(0);
 }
 

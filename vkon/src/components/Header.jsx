@@ -192,7 +192,7 @@ function DesktopFullHeader({ cartCount, wishlistCount, token, user, handleLogout
               </Link>
               <div className="flex flex-col text-left mt-1">
                 <Link to="/">
-                  <span className="font-serif font-bold text-xl leading-none tracking-[0.1em] text-white whitespace-nowrap block">VConnect</span>
+                  <span className="font-serif font-bold text-xl leading-none tracking-[0.1em] text-white whitespace-nowrap block">VConnect2U</span>
                 </Link>
                 
 
@@ -372,7 +372,7 @@ export function Header({ variant = 'default', title, showShare = false }) {
             >
               <div className="flex items-center gap-3">
                 <div className="h-12 w-auto bg-white rounded-xl p-1.5 shadow-sm border border-brand-blue/10 flex items-center justify-center">
-                  <img src={logo} alt="VConnect" className="h-full w-auto object-contain" />
+                  <img src={logo} alt="VConnect2U" className="h-full w-auto object-contain" />
                 </div>
               </div>
               <button
@@ -560,7 +560,7 @@ export function Header({ variant = 'default', title, showShare = false }) {
                     <Menu className="w-6 h-6 text-white" strokeWidth={1.5} />
                   </button>
                   <Link to="/" className="flex flex-col text-left">
-                    <span className="font-serif font-bold text-2xl leading-none text-white truncate pr-2">VConnect</span>
+                    <span className="font-serif font-bold text-2xl leading-none text-white truncate pr-2">VConnect2U</span>
                   </Link>
                 </div>
                 <div className="flex items-center gap-2">
@@ -604,7 +604,7 @@ export function Header({ variant = 'default', title, showShare = false }) {
                   <Menu className="w-6 h-6 text-white" strokeWidth={1.5} />
                 </button>
                 <Link to="/" className="flex flex-col text-left">
-                  <span className="font-serif font-bold text-xl leading-none text-white truncate pr-2">VConnect</span>
+                  <span className="font-serif font-bold text-xl leading-none text-white truncate pr-2">VConnect2U</span>
                 </Link>
               </div>
 

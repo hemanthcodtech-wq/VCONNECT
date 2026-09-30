@@ -63,7 +63,7 @@ export function SplashScreen({ onComplete }) {
           {/* Logo */}
           <img
             src={logoImg}
-            alt="VConnect Logo"
+            alt="VConnect2U Logo"
             className="object-contain mb-3"
             style={{
               width: '140px',
@@ -85,7 +85,7 @@ export function SplashScreen({ onComplete }) {
               textShadow: '0 2px 8px rgba(0,0,0,0.15)'
             }}
           >
-            VConnect
+            VConnect2U
           </span>
         </div>
 

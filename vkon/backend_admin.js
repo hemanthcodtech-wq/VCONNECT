@@ -562,7 +562,7 @@ router.post('/orders/:id/shippo-rates', authMiddleware, adminOnly, async (req, r
       zip: '94117',
       country: 'US',
       phone: '+1 555 341 9393',
-      email: 'admin@vconnect.com',
+      email: 'admin@vconnect2u.com',
     };
 
     const addressTo = {

@@ -50,7 +50,7 @@ const sections = [
     badge: 'Gift-Ready',
     badgeColor: 'bg-amber-100 text-amber-700',
     content: [
-      'Every VConnect order is packed in premium, branded packaging designed to protect your jewelry during transit.',
+      'Every VConnect2U order is packed in premium, branded packaging designed to protect your jewelry during transit.',
       'Our packaging is eco-friendly and gift-ready — perfect for gifting a loved one right out of the box.',
       'We use extra cushioning for delicate pieces to ensure they arrive in perfect condition.',
       'A beautiful thank-you card is included with every order.',
@@ -131,7 +131,7 @@ export function ShippingPolicyPage() {
             </h1>
             <div className="w-20 h-1.5 rounded-full mb-6" style={{ background: '#C6A184' }}></div>
             <p className="text-white/60 text-base md:text-lg leading-relaxed">
-              We want your VConnect experience to be seamless from purchase to delivery. Everything you need to know about how we ship.
+              We want your VConnect2U experience to be seamless from purchase to delivery. Everything you need to know about how we ship.
             </p>
             <p className="text-white/30 text-xs mt-4">Last updated: July 2025</p>
           </motion.div>

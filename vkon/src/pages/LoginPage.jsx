@@ -226,7 +226,7 @@ export function LoginPage() {
           >
             <div className="flex justify-center mb-6">
               <Link to="/">
-                <img src={logoImg} alt="VConnect" className="h-14 w-auto drop-shadow-md hover:scale-105 transition-transform" />
+                <img src={logoImg} alt="VConnect2U" className="h-14 w-auto drop-shadow-md hover:scale-105 transition-transform" />
               </Link>
             </div>
             
@@ -328,9 +328,9 @@ export function LoginPage() {
         >
           <div className="flex flex-col items-center mb-6 mt-2">
             <Link to="/">
-              <img src={brandLogo} alt="VConnect" className="h-14 w-auto drop-shadow-md hover:scale-105 transition-transform" />
+              <img src={brandLogo} alt="VConnect2U" className="h-14 w-auto drop-shadow-md hover:scale-105 transition-transform" />
             </Link>
-            <h1 className="font-sans font-extrabold tracking-tight text-gray-900 text-sm">VConnect</h1>
+            <h1 className="font-sans font-extrabold tracking-tight text-gray-900 text-sm">VConnect2U</h1>
           </div>
           
           {!showForgot && (

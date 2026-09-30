@@ -103,7 +103,7 @@ function StatTile({ icon: Icon, target, prefix = '', suffix = '', label, link, c
 // ── Stats banner ─────────────────────────────────────────────────────────────
 function StatsBanner() {
   const stats = [
-    { icon: InstagramIcon, target: 12.6, decimals: 1, suffix: 'K', label: 'Instagram Family', color: '#E1306C', link: 'https://www.instagram.com/vconnect?igsh=c2llNGRzM2RpbHZ3&utm_source=qr' },
+    { icon: InstagramIcon, target: 12.6, decimals: 1, suffix: 'K', label: 'Instagram Family', color: '#E1306C', link: 'https://www.instagram.com/vconnect2u?igsh=c2llNGRzM2RpbHZ3&utm_source=qr' },
     { icon: Package, target: 10, suffix: 'K+', label: 'Groceries Delivered', color: '#D4AF37' },
     { icon: MapPin, target: 500, suffix: '+', label: 'Store Pickups', color: '#60a5fa' },
     { icon: Globe, target: 50, suffix: '+', label: 'Neighborhoods Served', color: '#34d399' },
